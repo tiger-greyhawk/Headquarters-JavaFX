@@ -54,5 +54,13 @@ public class DummyUserDao implements UserDao {
     @Override
     public Optional<User> findByLogin(String login) {
         return dummy.stream().filter(u -> u.getLogin().equals(login)).findAny();
+        //return dummy.stream().filter(user -> user.getLogin().equals(login)).findFirst().get();
+    }
+
+
+    @Override
+    public User findByLogin1(String login) {
+        return dummy.stream().filter(user -> user.getLogin().equals(login)).findFirst().get();
+
     }
 }
