@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.AnchorPane?>
+<BorderPane xmlns:fx="http://javafx.com/fxml">
+    <top>
+        <FlowPane>
+            <padding>
+                <Insets top="25" bottom="25" right="25" left="25"/>
+            </padding>
+            <Label>filter factions by name: </Label>
+            <TextField fx:id="factionFilterPattern"/>
+            <TextField fx:id="loginProperty"/>
+        </FlowPane>
+    </top>
+    <center>
+        <SplitPane>
+            <AnchorPane xmlns:fx="http://javafx.com/fxml">
+                <TableView fx:id="factionTableView" AnchorPane.topAnchor="15" AnchorPane.leftAnchor="15" AnchorPane.rightAnchor="15" AnchorPane.bottomAnchor="120">
+                    <columns>
+                        <TableColumn fx:id="factionTableNameColumn" text="Name">
+                            <cellValueFactory><PropertyValueFactory property="name"/></cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="factionTableOwnerColumn" text="Owner">
+                            <cellValueFactory><PropertyValueFactory property="ownerName"/></cellValueFactory>
+                        </TableColumn>
+                    </columns>
+                </TableView>
+                <Button fx:id="deleteFactionButton" AnchorPane.bottomAnchor="85" AnchorPane.leftAnchor="15" AnchorPane.rightAnchor="15">Delete</Button>
+                <Button AnchorPane.bottomAnchor="50" AnchorPane.leftAnchor="15" AnchorPane.rightAnchor="15">Join</Button>
+                <Button AnchorPane.bottomAnchor="15" AnchorPane.leftAnchor="15" AnchorPane.rightAnchor="15">Create</Button>
+            </AnchorPane>
+            <AnchorPane>
+                <TableView fx:id="factionPlayersTableView" AnchorPane.topAnchor="15" AnchorPane.leftAnchor="15" AnchorPane.rightAnchor="15" AnchorPane.bottomAnchor="120">
+                    <columns>
+                        <TableColumn fx:id="factionPlayersTableIdColumn" text="Id">
+                        </TableColumn>
+                        <TableColumn fx:id="factionPlayersTableUserIdColumn" text="UserId">
+                        </TableColumn>
+                        <TableColumn fx:id="factionPlayersTableNickColumn" text="Nick">
+                        </TableColumn>
+                    </columns>
+                </TableView>
+                <Button AnchorPane.bottomAnchor="85" AnchorPane.leftAnchor="15" AnchorPane.rightAnchor="15">Eliminate</Button>
+                <Button AnchorPane.bottomAnchor="50" AnchorPane.leftAnchor="15" AnchorPane.rightAnchor="15">Invite</Button>
+                <Button AnchorPane.bottomAnchor="15" AnchorPane.leftAnchor="15" AnchorPane.rightAnchor="15">Improve</Button>
+            </AnchorPane>
+        </SplitPane>
+    </center>
+</BorderPane>
