@@ -22,6 +22,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.annotation.PostConstruct;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -62,19 +63,23 @@ public class FactionListController {
     }
 
     private Collection<FactionModel> getFactionList(final String filter) {
-        final List<Faction> factions = factionService.getFactions(filter);
-        final List<FactionModel> factionListModels = factions.stream()
-                .map(faction -> {
-                    final FactionModel factionModel = beanManager.create(FactionModel.class);
-                    factionModel.idProperty().set(faction.getId());
-                    factionModel.nameProperty().set(faction.getName());
-                    factionModel.ownerIdProperty().set(faction.getOwnerId());
-                    factionModel.ownerNameProperty().set(
-                            playerService.findPlayer(faction.getOwnerId()).map(Player::getNick).orElse("")
-                    );
-                    return factionModel;
-                }).collect(Collectors.toList());
-        return factionListModels;
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        //if (SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser"))
+        {
+            final List<Faction> factions = factionService.getFactions(filter);
+            final List<FactionModel> factionListModels = factions.stream()
+                    .map(faction -> {
+                        final FactionModel factionModel = beanManager.create(FactionModel.class);
+                        factionModel.idProperty().set(faction.getId());
+                        factionModel.nameProperty().set(faction.getName());
+                        factionModel.ownerIdProperty().set(faction.getOwnerId());
+                        factionModel.ownerNameProperty().set(
+                                playerService.findPlayer(faction.getOwnerId()).map(Player::getNick).orElse("")
+                        );
+                        return factionModel;
+                    }).collect(Collectors.toList());
+            return factionListModels;
+        }
     }
 
     private Collection<PlayerModel> getPlayers(final Long factionId) {
@@ -106,6 +111,7 @@ public class FactionListController {
      */
     @PostConstruct
     public void init() {
+
         model.currentUserModelProperty().set(beanManager.create(CurrentUserModel.class));
         model.currentUserModelProperty().get().loggedInProperty().set(false);
         model.factionsProperty().addAll(getFactionList(""));
