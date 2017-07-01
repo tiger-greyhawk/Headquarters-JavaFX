@@ -17,6 +17,8 @@ import name.timoshenko.communityhelper.server.model.service.PlayerService;
 import name.timoshenko.communityhelper.server.model.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.annotation.PostConstruct;
 import java.util.Collection;
@@ -35,6 +37,9 @@ public class FactionListController {
     private final PlayerService playerService;
     private final BeanManager beanManager;
     private final DolphinEventBus eventBus;
+
+//    @Autowired
+//    private DolphinSession session;
 
 
     @DolphinModel
@@ -86,6 +91,9 @@ public class FactionListController {
     }
 
     private boolean isCurrentUserOwnsCurrentFaction() {
+        Object principal =  SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        //String principalName = ((UserDetails)principal).getUsername();
+        //CurrentUserModel currentUser =
         final Long userId = model.currentUserModelProperty().get().userIdProperty().get();
         final Long factionOwnerId = model.selectedFactionProperty().get().getOwnerId();
         return playerService.findPlayer(factionOwnerId)

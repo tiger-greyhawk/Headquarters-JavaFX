@@ -22,6 +22,11 @@
             <artifactId>dolphin-platform-server-spring</artifactId>
             <version>0.15.0</version>
         </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.canoo.dolphin-platform</groupId>-->
+            <!--<artifactId>dolphin-platform-server</artifactId>-->
+            <!--<version>0.15.0</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot</artifactId>
@@ -32,17 +37,18 @@
             <artifactId>spring-boot-starter-web</artifactId>
             <version>1.5.4.RELEASE</version>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
             <version>1.5.4.RELEASE</version>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>18.0</version>
             <type>jar</type>
-        </dependency>
+        </dependency>-->
         <!-- Spring-security -->
         <!--<dependency>
             <groupId>org.springframework.security</groupId>

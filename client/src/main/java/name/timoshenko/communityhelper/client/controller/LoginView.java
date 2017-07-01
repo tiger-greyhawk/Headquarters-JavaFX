@@ -1,8 +1,11 @@
 package name.timoshenko.communityhelper.client.controller;
 
+import com.canoo.platform.client.ClientConfiguration;
 import com.canoo.platform.client.ClientContext;
 import com.canoo.platform.client.ControllerActionException;
+import com.canoo.platform.client.HttpURLConnectionFactory;
 import com.canoo.platform.client.javafx.FXBinder;
+import com.canoo.platform.client.javafx.JavaFXConfiguration;
 import com.canoo.platform.client.javafx.view.AbstractFXMLViewBinder;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -11,6 +14,10 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import name.timoshenko.communityhelper.common.Constants;
 import name.timoshenko.communityhelper.common.model.CurrentUserModel;
+import sun.net.www.protocol.http.HttpURLConnection;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 
 /**
@@ -37,9 +44,13 @@ public class LoginView extends AbstractFXMLViewBinder<CurrentUserModel> {
      * @param clientContext  the DOlphin Platform client context
      */
     public LoginView(ClientContext clientContext, Stage ownStage) {
+
         super(clientContext, Constants.LOGIN_CONTROLLER_NAME, FactionListView.class.getResource("/view/login_window.fxml"));
+
         this.ownStage = ownStage;
     }
+
+
 
     @Override
     protected void init() {

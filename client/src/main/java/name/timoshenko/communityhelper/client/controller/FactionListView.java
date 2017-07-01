@@ -2,6 +2,7 @@ package name.timoshenko.communityhelper.client.controller;
 
 import com.canoo.platform.client.ClientContext;
 import com.canoo.platform.client.ControllerActionException;
+
 import com.canoo.platform.client.javafx.FXBinder;
 import com.canoo.platform.client.javafx.binding.FXWrapper;
 import com.canoo.platform.client.javafx.view.AbstractFXMLViewBinder;
@@ -11,6 +12,8 @@ import name.timoshenko.communityhelper.common.Constants;
 import name.timoshenko.communityhelper.common.model.FactionListModel;
 import name.timoshenko.communityhelper.common.model.FactionModel;
 import name.timoshenko.communityhelper.common.model.PlayerModel;
+import org.springframework.beans.factory.annotation.Autowired;
+import sun.plugin.liveconnect.SecurityContextHelper;
 
 import java.net.MalformedURLException;
 
@@ -18,6 +21,8 @@ import java.net.MalformedURLException;
  *
  */
 public class FactionListView extends AbstractFXMLViewBinder<FactionListModel> {
+
+
 
     @FXML
     private TextField factionFilterPattern;
@@ -62,6 +67,8 @@ public class FactionListView extends AbstractFXMLViewBinder<FactionListModel> {
 
         FXBinder.bind(loginProperty.textProperty())
                 .bidirectionalTo(getModel().currentUserModelProperty().get().loginProperty());
+
+
 
         deleteFactionButton.setDisable(true);
         FXBinder.bind(deleteFactionButton.disableProperty())

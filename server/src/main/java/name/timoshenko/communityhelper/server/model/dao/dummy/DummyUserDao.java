@@ -18,7 +18,8 @@ public class DummyUserDao implements UserDao {
     private final List<User> dummy = Arrays.asList(
             new User(1L, "User1", "123"),
             new User(2L, "User2", "123"),
-            new User(3L, "User3", "123")
+            new User(3L, "User3", "123"),
+            new User(4L, "anonymousUser", "")
     );
 
     @Override

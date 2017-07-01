@@ -24,21 +24,21 @@ import java.io.IOException;
 /**
  * Created by Tiger on 30.06.2017.
  */
-public class TokenAuthenticationFilter extends GenericFilterBean {
+public class AuthenticationFilter extends GenericFilterBean {
 
     private final AuthenticationManager authenticationManager;
 
-    private final AuthenticationEntryPoint authenticationEntryPoint;
+    //private final AuthenticationEntryPoint authenticationEntryPoint;
 
-    private final String header;
+    //private final String header;
 
-    private final boolean ignoreFault;
+    //private final boolean ignoreFault;
 
-    public TokenAuthenticationFilter(AuthenticationManager authenticationManager, AuthenticationEntryPoint authenticationEntryPoint, String header, boolean ignoreFault) {
+    public AuthenticationFilter(AuthenticationManager authenticationManager) {//, AuthenticationEntryPoint authenticationEntryPoint) {//, String header, boolean ignoreFault) {
         this.authenticationManager = authenticationManager;
-        this.authenticationEntryPoint = authenticationEntryPoint;
-        this.header = header;
-        this.ignoreFault = ignoreFault;
+        //this.authenticationEntryPoint = authenticationEntryPoint;
+        //this.header = header;
+        //this.ignoreFault = ignoreFault;
     }
 
     @Override
@@ -47,23 +47,23 @@ public class TokenAuthenticationFilter extends GenericFilterBean {
         HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
 
         try {
-            String headerValue = httpServletRequest.getHeader(header);
-            if (Strings.isNullOrEmpty(headerValue)) {
+
+            /*if (Strings.isNullOrEmpty(header)) {
                 throw new TokenAuthenticationHeaderNotFound("Header " + header + " is not found.", null);
-            }
-
+            }*/
+            //String headerValue = httpServletRequest.getHeader(header);
             //Authentication authentication = authenticationManager.authenticate(new TokenAuthentication(headerValue));
-            Authentication authentication = authenticationManager.authenticate(new TokenAuthentication(header));
+            //Authentication authentication = authenticationManager.authenticate();
 
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            //SecurityContextHolder.getContext().setAuthentication(authentication);
 
             filterChain.doFilter(servletRequest, servletResponse);
         } catch (AuthenticationException authenticationException) {
-            if (!ignoreFault) {
+            /*if (!ignoreFault) {
                 authenticationEntryPoint.commence(httpServletRequest, httpServletResponse, authenticationException);
             } else {
                 filterChain.doFilter(servletRequest, servletResponse);
-            }
+            }*/
         }
     }
 }
