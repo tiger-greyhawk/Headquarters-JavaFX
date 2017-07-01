@@ -17,11 +17,11 @@ public class SessionListener implements ClientSessionListener {
     private Logger LOG = LoggerFactory.getLogger(SessionListener.class);
 
     public void sessionCreated(ClientSession s) {
-        LOG.info("Session with id {0} created!", s, s.getId());
+        LOG.info("Session with id {0} created!" + s.getId());
     }
 
     public void sessionDestroyed(ClientSession s) {
-        LOG.info("Session with id {0} destroyed!", s.getId());
+        LOG.info("Session with id {0} destroyed!" + s.getId());
     }
 
 }
