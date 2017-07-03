@@ -22,6 +22,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.annotation.PostConstruct;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,6 +59,7 @@ public class FactionListController {
     }
 
     private Collection<FactionModel> getFactionList(final String filter) {
+
         final List<Faction> factions = factionService.getFactions(filter);
         return factions.stream()
                 .map(faction -> {
@@ -70,6 +72,9 @@ public class FactionListController {
                     );
                     return factionModel;
                 }).collect(Collectors.toList());
+
+       
+
     }
 
     private Collection<PlayerModel> getPlayers(final Long factionId) {
@@ -101,6 +106,7 @@ public class FactionListController {
      */
     @PostConstruct
     public void init() {
+
         model.currentUserModelProperty().set(beanManager.create(CurrentUserModel.class));
         model.currentUserModelProperty().get().loggedInProperty().set(false);
         model.factionsProperty().addAll(getFactionList(""));
