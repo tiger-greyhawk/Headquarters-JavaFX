@@ -1,9 +1,8 @@
 package name.timoshenko.communityhelper.server.model.service.basic;
 
-import name.timoshenko.communityhelper.server.model.dao.FactionPlayerDao;
 import name.timoshenko.communityhelper.server.model.domain.FactionPlayer;
+import name.timoshenko.communityhelper.server.model.repositories.FactionPlayerRepository;
 import name.timoshenko.communityhelper.server.model.service.FactionPlayerService;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,10 +14,10 @@ import java.util.stream.Collectors;
 @Service("basicFactionPlayerService")
 public class BasicFactionPlayerService implements FactionPlayerService {
 
-    private final FactionPlayerDao factionPlayerDao;
+    private final FactionPlayerRepository factionPlayerDao;
 
-    public BasicFactionPlayerService(@Qualifier("dummyFactionPlayerDao") FactionPlayerDao factionPlayerDao) {
-        this.factionPlayerDao = factionPlayerDao;
+    public BasicFactionPlayerService(FactionPlayerRepository factionPlayerRepository) {
+        this.factionPlayerDao = factionPlayerRepository;
     }
 
     @Override

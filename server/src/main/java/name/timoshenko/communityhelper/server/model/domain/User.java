@@ -1,12 +1,20 @@
 package name.timoshenko.communityhelper.server.model.domain;
 
+import javax.persistence.*;
+
 /**
  *
  */
+@Entity
+@Table(name = "users")
 public class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private final Long id;
+    @Column(name = "login", nullable = false, unique = true)
     private final String login;
+    @Column(name = "password", nullable = false)
     private final String passwordHash;
 
     public User() {

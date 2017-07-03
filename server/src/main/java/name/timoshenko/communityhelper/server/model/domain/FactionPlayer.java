@@ -1,12 +1,23 @@
 package name.timoshenko.communityhelper.server.model.domain;
 
+import javax.persistence.*;
+
 /**
  *
  */
+@Entity
+@Table(name = "faction_players",
+uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"faction_id", "player_id"})
+})
 public class FactionPlayer {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private final Long id;
+    @Column(name = "faction_id")
     private final Long factionId;
+    @Column(name = "player_id")
     private final Long playerId;
 
     public FactionPlayer() {

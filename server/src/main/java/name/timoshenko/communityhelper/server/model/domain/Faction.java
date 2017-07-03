@@ -1,12 +1,20 @@
 package name.timoshenko.communityhelper.server.model.domain;
 
+import javax.persistence.*;
+
 /**
  *
  */
+@Entity
+@Table(name = "factions")
 public class Faction {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private final Long id;
+    @Column(name = "name", unique = true, nullable = false)
     private final String name;
+    @Column(name = "owner_id", nullable = false)
     private final Long ownerId;
 
     public Faction() {

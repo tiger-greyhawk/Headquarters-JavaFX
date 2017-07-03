@@ -38,10 +38,6 @@ public class FactionListController {
     private final BeanManager beanManager;
     private final DolphinEventBus eventBus;
 
-//    @Autowired
-//    private DolphinSession session;
-
-
     @DolphinModel
     private FactionListModel model;
 
@@ -63,7 +59,7 @@ public class FactionListController {
 
     private Collection<FactionModel> getFactionList(final String filter) {
         final List<Faction> factions = factionService.getFactions(filter);
-        final List<FactionModel> factionListModels = factions.stream()
+        return factions.stream()
                 .map(faction -> {
                     final FactionModel factionModel = beanManager.create(FactionModel.class);
                     factionModel.idProperty().set(faction.getId());
@@ -74,7 +70,6 @@ public class FactionListController {
                     );
                     return factionModel;
                 }).collect(Collectors.toList());
-        return factionListModels;
     }
 
     private Collection<PlayerModel> getPlayers(final Long factionId) {
