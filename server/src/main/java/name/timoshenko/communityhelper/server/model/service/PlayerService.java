@@ -10,6 +10,6 @@ import java.util.Optional;
  */
 public interface PlayerService {
     Optional<Player> findPlayer(long id);
-    List<Player> findPlayersByUserId(long userId);
+
     List<Player> getPlayers(List<Long> id);
 }

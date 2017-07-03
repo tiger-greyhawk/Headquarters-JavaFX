@@ -39,10 +39,6 @@ public class FactionListController {
     private final BeanManager beanManager;
     private final DolphinEventBus eventBus;
 
-//    @Autowired
-//    private DolphinSession session;
-
-
     @DolphinModel
     private FactionListModel model;
 
@@ -63,23 +59,22 @@ public class FactionListController {
     }
 
     private Collection<FactionModel> getFactionList(final String filter) {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        //if (SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser"))
-        {
-            final List<Faction> factions = factionService.getFactions(filter);
-            final List<FactionModel> factionListModels = factions.stream()
-                    .map(faction -> {
-                        final FactionModel factionModel = beanManager.create(FactionModel.class);
-                        factionModel.idProperty().set(faction.getId());
-                        factionModel.nameProperty().set(faction.getName());
-                        factionModel.ownerIdProperty().set(faction.getOwnerId());
-                        factionModel.ownerNameProperty().set(
-                                playerService.findPlayer(faction.getOwnerId()).map(Player::getNick).orElse("")
-                        );
-                        return factionModel;
-                    }).collect(Collectors.toList());
-            return factionListModels;
-        }
+
+        final List<Faction> factions = factionService.getFactions(filter);
+        return factions.stream()
+                .map(faction -> {
+                    final FactionModel factionModel = beanManager.create(FactionModel.class);
+                    factionModel.idProperty().set(faction.getId());
+                    factionModel.nameProperty().set(faction.getName());
+                    factionModel.ownerIdProperty().set(faction.getOwnerId());
+                    factionModel.ownerNameProperty().set(
+                            playerService.findPlayer(faction.getOwnerId()).map(Player::getNick).orElse("")
+                    );
+                    return factionModel;
+                }).collect(Collectors.toList());
+
+       
+
     }
 
     private Collection<PlayerModel> getPlayers(final Long factionId) {

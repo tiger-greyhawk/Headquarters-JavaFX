@@ -2,18 +2,18 @@ package name.timoshenko.communityhelper.client.controller;
 
 import com.canoo.platform.client.ClientContext;
 import com.canoo.platform.client.ControllerActionException;
-
 import com.canoo.platform.client.javafx.FXBinder;
 import com.canoo.platform.client.javafx.binding.FXWrapper;
 import com.canoo.platform.client.javafx.view.AbstractFXMLViewBinder;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import name.timoshenko.communityhelper.common.Constants;
 import name.timoshenko.communityhelper.common.model.FactionListModel;
 import name.timoshenko.communityhelper.common.model.FactionModel;
 import name.timoshenko.communityhelper.common.model.PlayerModel;
-import org.springframework.beans.factory.annotation.Autowired;
-import sun.plugin.liveconnect.SecurityContextHelper;
 
 import java.net.MalformedURLException;
 

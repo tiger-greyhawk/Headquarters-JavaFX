@@ -1,9 +1,8 @@
 package name.timoshenko.communityhelper.server.model.service.basic;
 
-import name.timoshenko.communityhelper.server.model.dao.PlayerDao;
 import name.timoshenko.communityhelper.server.model.domain.Player;
+import name.timoshenko.communityhelper.server.model.repositories.PlayerRepository;
 import name.timoshenko.communityhelper.server.model.service.PlayerService;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,24 +14,19 @@ import java.util.Optional;
 @Service("basicPlayerService")
 public class BasicPlayerService implements PlayerService {
 
-    private final PlayerDao playerDao;
+    private final PlayerRepository playerRepository;
 
-    public BasicPlayerService(@Qualifier("dummyPlayerDao") PlayerDao playerDao) {
-        this.playerDao = playerDao;
+    public BasicPlayerService(PlayerRepository playerRepository) {
+        this.playerRepository = playerRepository;
     }
 
     @Override
     public Optional<Player> findPlayer(long id) {
-        return playerDao.findById(id);
-    }
-
-    @Override
-    public List<Player> findPlayersByUserId(long userId) {
-        return playerDao.findByUserId(userId);
+        return Optional.ofNullable(playerRepository.findOne(id));
     }
 
     @Override
     public List<Player> getPlayers(List<Long> id) {
-        return playerDao.findById(id);
+        return playerRepository.findAll(id);
     }
 }
