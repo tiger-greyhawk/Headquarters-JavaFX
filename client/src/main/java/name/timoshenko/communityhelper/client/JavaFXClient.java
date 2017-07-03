@@ -1,6 +1,5 @@
 package name.timoshenko.communityhelper.client;
 
-import com.canoo.dolphin.BeanManager;
 import com.canoo.platform.client.*;
 import com.canoo.platform.client.javafx.DolphinPlatformApplication;
 //import com.canoo.platform.client.javafx.JavaFXConfiguration;
@@ -9,7 +8,7 @@ import com.canoo.platform.core.DolphinRuntimeException;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import name.timoshenko.communityhelper.client.controller.FactionListView;
+import name.timoshenko.communityhelper.client.controller.MainView;
 import name.timoshenko.communityhelper.client.controller.LoginView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +18,6 @@ import sun.net.www.protocol.http.HttpURLConnection;
 //import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.concurrent.CompletableFuture;
 
 /**
  *
@@ -38,26 +36,14 @@ public class JavaFXClient extends DolphinPlatformApplication {
         //return new URL("http://localhost:8080");
     }
 
-    /*
-    HttpURLConnectionFactory myFactory = url -> {
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestProperty("Security-Header", "My secret token");
-        return connection;
-    };
-
-
-    ClientConfiguration configuration = new JavaFXConfiguration(getServerEndpoint());
-        configuration.setConnectionFactory(myFactory);
-        */
-
     @Override
-    protected void start(Stage stage, ClientContext clientContext) throws Exception {
+    protected void start(Stage mainStage, ClientContext clientContext) throws Exception {
 
         String clientId = clientContext.getClientId();
 
         HttpURLConnectionFactory myFactory = url -> {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestProperty("User1", "123");
+            //connection.setRequestProperty("User1", "123");
             return connection;
         };
 
@@ -65,11 +51,12 @@ public class JavaFXClient extends DolphinPlatformApplication {
         ClientConfiguration configuration = new JavaFXConfiguration(getServerEndpoint());
         configuration.setConnectionFactory(myFactory);
 
-        final FactionListView viewBinder = new FactionListView(clientContext);
-        final Scene scene = new Scene(viewBinder.getParent());
-        stage.setScene(scene);
-        stage.setOnCloseRequest(e -> System.exit(0));
-        stage.show();
+        //final Stage mainStage = new Stage();
+        final MainView mainViewBinder = new MainView(clientContext, mainStage);
+        final Scene mainScene = new Scene(mainViewBinder.getParent());
+        mainStage.setScene(mainScene);
+        mainStage.setOnCloseRequest(e -> System.exit(0));
+        mainStage.show();
 
         final Stage loginStage = new Stage();
         final LoginView loginView = new LoginView(clientContext, loginStage);
@@ -78,6 +65,9 @@ public class JavaFXClient extends DolphinPlatformApplication {
         loginStage.setResizable(false);
         loginStage.initModality(Modality.APPLICATION_MODAL);
         loginStage.show();
+
+
+
     }
 
     @Override

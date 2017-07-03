@@ -4,11 +4,13 @@ import com.canoo.dolphin.collections.ObservableList;
 import com.canoo.dolphin.mapping.DolphinBean;
 import com.canoo.dolphin.mapping.Property;
 
+import java.io.Serializable;
+
 /**
  *
  */
 @DolphinBean
-public class FactionListModel {
+public class FactionListModel implements Serializable {
 
     private Property<CurrentUserModel> currentUser;
 

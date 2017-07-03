@@ -6,22 +6,11 @@ import com.canoo.platform.server.DolphinModel;
 import com.canoo.platform.server.event.DolphinEventBus;
 import name.timoshenko.communityhelper.common.Constants;
 import name.timoshenko.communityhelper.common.model.CurrentUserModel;
-import name.timoshenko.communityhelper.server.controller.Security.AuthenticationDolphin;
-import name.timoshenko.communityhelper.server.controller.Security.AuthenticationManagerDolphin;
 import name.timoshenko.communityhelper.server.model.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 
 import javax.annotation.PostConstruct;
-import java.util.Collection;
 
 /**
  *
@@ -40,10 +29,12 @@ public class LoginController {
 
     @Autowired
     //public LoginController(DolphinEventBus eventBus, AuthService authService, AuthenticationProviderDolphin authenticationProviderDolphin, AuthenticationDolphin authenticationDolphin) {
+    //public LoginController(DolphinEventBus eventBus, AuthService authService, AuthenticationManager authenticationManagerDolphin, CurrentUserModel currentUserModel) {
     public LoginController(DolphinEventBus eventBus, AuthService authService, AuthenticationManager authenticationManagerDolphin) {
         this.eventBus = eventBus;
         this.authService = authService;
         this.authenticationManager = authenticationManagerDolphin;
+        //this.currentUserModel = currentUserModel;
         //this.authenticationProviderDolphin = authenticationProviderDolphin;
         //this.authenticationDolphin = authenticationDolphin;
     }
@@ -75,6 +66,7 @@ public class LoginController {
         currentUserModel.userIdProperty().set(1L);
 
         eventBus.publish(EventTopics.LOGIN_TOPIC, currentUserModel);
+
     }
 
 }

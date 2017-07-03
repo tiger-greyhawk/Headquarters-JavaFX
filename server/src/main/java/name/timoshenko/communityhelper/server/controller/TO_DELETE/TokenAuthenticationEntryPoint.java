@@ -1,5 +1,6 @@
-package name.timoshenko.communityhelper.server.controller.Security;
+package name.timoshenko.communityhelper.server.controller.TO_DELETE;
 
+import name.timoshenko.communityhelper.server.controller.TO_DELETE.TokenAuthenticationHeaderNotFound;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 

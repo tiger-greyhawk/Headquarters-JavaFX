@@ -1,4 +1,4 @@
-package name.timoshenko.communityhelper.server.controller.Security;
+package name.timoshenko.communityhelper.server.controller.TO_DELETE;
 
 import com.google.common.base.Strings;
 //import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
@@ -22,10 +22,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Created by Tiger on 30.06.2017.
+ *
  */
-public class AuthenticationFilter extends GenericFilterBean {
-
+public class AuthenticationFilter //extends GenericFilterBean
+{
+/*
     private final AuthenticationManager authenticationManager;
 
     //private final AuthenticationEntryPoint authenticationEntryPoint;
@@ -48,9 +49,9 @@ public class AuthenticationFilter extends GenericFilterBean {
 
         try {
 
-            /*if (Strings.isNullOrEmpty(header)) {
-                throw new TokenAuthenticationHeaderNotFound("Header " + header + " is not found.", null);
-            }*/
+            //if (Strings.isNullOrEmpty(header)) {
+                //throw new TokenAuthenticationHeaderNotFound("Header " + header + " is not found.", null);
+            //}
             //String headerValue = httpServletRequest.getHeader(header);
             //Authentication authentication = authenticationManager.authenticate(new TokenAuthentication(headerValue));
             //Authentication authentication = authenticationManager.authenticate();
@@ -59,11 +60,11 @@ public class AuthenticationFilter extends GenericFilterBean {
 
             filterChain.doFilter(servletRequest, servletResponse);
         } catch (AuthenticationException authenticationException) {
-            /*if (!ignoreFault) {
-                authenticationEntryPoint.commence(httpServletRequest, httpServletResponse, authenticationException);
-            } else {
-                filterChain.doFilter(servletRequest, servletResponse);
-            }*/
+            //if (!ignoreFault) {
+                //authenticationEntryPoint.commence(httpServletRequest, httpServletResponse, authenticationException);
+            //} else {
+                //filterChain.doFilter(servletRequest, servletResponse);
+            //}
         }
-    }
+    }*/
 }

@@ -32,6 +32,7 @@ public class BasicAuthService implements AuthService {
         try {
             Authentication request = new UsernamePasswordAuthenticationToken(login, passwordHash);
             Authentication result = authenticationManager.authenticate(request);
+            if (result == null) return false;
             SecurityContextHolder.getContext().setAuthentication(result);
             return true;
         } catch (AuthenticationException e) {

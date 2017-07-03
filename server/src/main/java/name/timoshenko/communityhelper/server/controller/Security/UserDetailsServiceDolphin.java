@@ -2,6 +2,7 @@ package name.timoshenko.communityhelper.server.controller.Security;
 
 import name.timoshenko.communityhelper.server.model.domain.User;
 import name.timoshenko.communityhelper.server.model.repositories.UserRepository;
+import name.timoshenko.communityhelper.server.model.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,7 +23,6 @@ public class UserDetailsServiceDolphin implements UserDetailsService {
     /*private static final Logger log = Logger
             .getLogger(UserDetailsServiceDolphin.class);*/
     private final UserRepository userRepository;
-
     @Autowired
     UserDetailsServiceDolphin(UserRepository userRepository) {
         this.userRepository = userRepository;

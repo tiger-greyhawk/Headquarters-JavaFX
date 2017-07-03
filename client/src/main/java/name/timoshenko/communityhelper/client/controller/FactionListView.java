@@ -10,6 +10,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import name.timoshenko.communityhelper.common.Constants;
 import name.timoshenko.communityhelper.common.model.FactionListModel;
 import name.timoshenko.communityhelper.common.model.FactionModel;
@@ -23,6 +24,7 @@ import java.net.MalformedURLException;
 public class FactionListView extends AbstractFXMLViewBinder<FactionListModel> {
 
 
+    private final Stage ownStage;
 
     @FXML
     private TextField factionFilterPattern;
@@ -45,8 +47,10 @@ public class FactionListView extends AbstractFXMLViewBinder<FactionListModel> {
     @FXML
     private TextField loginProperty;
 
-    public FactionListView(ClientContext clientContext) throws MalformedURLException {
+    public FactionListView(ClientContext clientContext, Stage ownStage) //throws MalformedURLException
+    {
         super(clientContext, Constants.FACTION_LIST_CONTROLLER_NAME, FactionListView.class.getResource("/view/faction_list_window.fxml"));
+        this.ownStage = ownStage;
     }
 
     @Override

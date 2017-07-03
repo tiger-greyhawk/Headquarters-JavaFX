@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+
+<BorderPane stylesheets="@/css/MainTheme.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+            <!-- Main menu -->
+            <Menu fx:id="mainMenu" mnemonicParsing="false">
+              <graphic>
+                  <ImageView pickOnBounds="true" smooth="false">
+                      <image>
+                          <Image url="@/media/icon/database.png" />
+                      </image>
+                  </ImageView>
+              </graphic>
+            <items>
+              <MenuItem fx:id="connectMenuItem" mnemonicParsing="false" text="Connect">
+                  <graphic>
+                      <ImageView pickOnBounds="true" smooth="false">
+                          <image>
+                            <Image url="@/media/icon/connect.png" />
+                          </image>
+                      </ImageView>
+                  </graphic>
+              </MenuItem>
+              <MenuItem fx:id="registrationMenuItem" mnemonicParsing="false" text="Registration" />
+              <MenuItem fx:id="exitMenuItem" mnemonicParsing="false" text="Exit" />
+            </items>
+          </Menu>
+          <Menu fx:id="FunctionalMenu" mnemonicParsing="false">
+              <graphic>
+                  <ImageView pickOnBounds="true" smooth="false">
+                      <image>
+                          <Image url="@/media/icon/monitor_link.png" />
+                      </image>
+                  </ImageView>
+              </graphic>
+               <items>
+                  <MenuItem mnemonicParsing="false" text="Supply" />
+                  <Menu mnemonicParsing="false" text="Military. Запросы на подкрепы, тайм-атаки, интердикты, и т.п.">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Time-attack" />
+                        <MenuItem mnemonicParsing="false" text="Pattern templates" />
+                        <MenuItem mnemonicParsing="false" text="Monks" />
+                        <Menu mnemonicParsing="false" text="Unspecified Menu">
+                          <items>
+                            <MenuItem mnemonicParsing="false" text="Action 1" />
+                          </items>
+                        </Menu>
+                    </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Statistic">
+                     <items>
+                        <Menu mnemonicParsing="false" text="Faction">
+                          <items>
+                            <MenuItem mnemonicParsing="false" text="Supply" />
+                              <MenuItem mnemonicParsing="false" text="Military" />
+                              <MenuItem mnemonicParsing="false" text="Monks" />
+                          </items>
+                        </Menu>
+                     </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Policy">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Map" />
+                        <MenuItem mnemonicParsing="false" text="Possible spies. Личное меню или для руководства фракций+  ???" />
+                        <MenuItem mnemonicParsing="false" text="Directive to allies. Доступна только руководству альянса." />
+                    </items>
+                  </Menu>
+               </items>
+          </Menu>
+          <Menu fx:id="OptionsMenu" mnemonicParsing="false">
+              <graphic>
+                  <ImageView pickOnBounds="true" smooth="false">
+                      <image>
+                          <Image url="@/media/icon/cog.png" />
+                      </image>
+                  </ImageView>
+              </graphic>
+            <items>
+              <MenuItem mnemonicParsing="false" text="My players" />
+                  <Menu mnemonicParsing="false" text="Manage active player">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Villages" />
+                        <MenuItem mnemonicParsing="false" text="Research" />
+                        <MenuItem mnemonicParsing="false" text="Personal friends" />
+                    </items>
+                  </Menu>
+                  <MenuItem mnemonicParsing="false" text="Setting notifications" />
+                  <MenuItem mnemonicParsing="false" text="Preferences" />
+            </items>
+          </Menu>
+            <Menu fx:id="HelpMenu" mnemonicParsing="false">
+                <graphic>
+                    <ImageView pickOnBounds="true" smooth="false">
+                        <image>
+                            <Image url="@/media/icon/information.png" />
+                        </image>
+                    </ImageView>
+                </graphic>
+              <items>
+                <MenuItem mnemonicParsing="false" text="About us" />
+              </items>
+            </Menu>
+            <Menu fx:id="LanguagesMenu" mnemonicParsing="false">
+                <graphic>
+                    <ImageView pickOnBounds="true" smooth="false">
+                        <image>
+                            <Image url="@/media/icon/world.png" />
+                        </image>
+                    </ImageView>
+                </graphic>
+              <items>
+                <MenuItem mnemonicParsing="false" text="Будет заполняться культурами языков. Как это сделать в яве - не знаю." />
+              </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Chats">
+              <items>
+                <MenuItem mnemonicParsing="false" text="Open chats window" />
+              </items>
+            </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+   <left>
+      <FlowPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+   </left>
+</BorderPane>

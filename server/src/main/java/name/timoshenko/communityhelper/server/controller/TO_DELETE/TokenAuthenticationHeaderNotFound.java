@@ -1,4 +1,4 @@
-package name.timoshenko.communityhelper.server.controller.Security;
+package name.timoshenko.communityhelper.server.controller.TO_DELETE;
 
 import org.springframework.security.core.AuthenticationException;
 

@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Tiger on 30.06.2017.
+ *
  */
 @Component
 public class AuthenticationManagerDolphin implements AuthenticationManager {
@@ -44,6 +44,7 @@ public class AuthenticationManagerDolphin implements AuthenticationManager {
         //if (auth.getName().equals(auth.getCredentials()))
         //if (auth.getName() != null)
         UserDetails userToAuth = userDetailsService.loadUserByUsername(auth.getName());
+        if (userToAuth == null) throw new BadCredentialsException("Bad Credentials");
         if (userToAuth.getPassword().equals(auth.getCredentials()))
         {
             LOGGER.info("авторизовался пользователь "+ auth.getPrincipal().toString());

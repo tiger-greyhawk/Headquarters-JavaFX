@@ -45,7 +45,7 @@ public class LoginView extends AbstractFXMLViewBinder<CurrentUserModel> {
      */
     public LoginView(ClientContext clientContext, Stage ownStage) {
 
-        super(clientContext, Constants.LOGIN_CONTROLLER_NAME, FactionListView.class.getResource("/view/login_window.fxml"));
+        super(clientContext, Constants.LOGIN_CONTROLLER_NAME, LoginView.class.getResource("/view/login_window.fxml"));
 
         this.ownStage = ownStage;
     }

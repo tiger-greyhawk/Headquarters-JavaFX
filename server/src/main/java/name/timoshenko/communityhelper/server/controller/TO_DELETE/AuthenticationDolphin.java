@@ -1,4 +1,4 @@
-package name.timoshenko.communityhelper.server.controller.Security;
+package name.timoshenko.communityhelper.server.controller.TO_DELETE;
 
 import name.timoshenko.communityhelper.common.model.CurrentUserModel;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
@@ -14,8 +14,9 @@ import java.util.Collection;
  * Created by Tiger on 30.06.2017.
  */
 //@Component
-public class AuthenticationDolphin implements Authentication {
-
+public class AuthenticationDolphin// implements Authentication
+{
+/*
     public UserDetailsService userDetailsService;
 
     public AuthenticationDolphin(UserDetailsService userDetailsService) {
@@ -70,5 +71,5 @@ public class AuthenticationDolphin implements Authentication {
     @Override
     public String getName() {
         return null;
-    }
+    }*/
 }
