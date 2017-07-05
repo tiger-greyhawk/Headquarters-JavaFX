@@ -32,6 +32,7 @@
                   </graphic>
               </MenuItem>
               <MenuItem fx:id="registrationMenuItem" mnemonicParsing="false" text="Registration" />
+              <MenuItem fx:id="logoutMenuItem" mnemonicParsing="false" text="Log Out" />
               <MenuItem fx:id="exitMenuItem" mnemonicParsing="false" text="Exit" />
             </items>
           </Menu>
