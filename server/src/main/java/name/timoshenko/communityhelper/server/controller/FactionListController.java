@@ -39,9 +39,7 @@ public class FactionListController {
     private final FactionService factionService;
     private final FactionPlayerService factionPlayerService;
     private final PlayerService playerService;
-    private final UserService userService;
     private final BeanManager beanManager;
-    private final DolphinEventBus eventBus;
     private final PropertyBinder propertyBinder;
 
     @DolphinModel
@@ -54,16 +52,12 @@ public class FactionListController {
     public FactionListController(@Qualifier("cachedFactionService") FactionService factionService,
                                  FactionPlayerService factionPlayerService,
                                  PlayerService playerService,
-                                 UserService userService,
                                  BeanManager beanManager,
-                                 DolphinEventBus eventBus,
                                  PropertyBinder propertyBinder) {
         this.factionService = factionService;
         this.factionPlayerService = factionPlayerService;
         this.playerService = playerService;
-        this.userService = userService;
         this.beanManager = beanManager;
-        this.eventBus = eventBus;
         this.propertyBinder = propertyBinder;
     }
 
@@ -96,19 +90,11 @@ public class FactionListController {
     }
 
     private boolean isCurrentUserOwnsCurrentFaction() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         final Long userId = model.currentUserModelProperty().get().userIdProperty().get();
         final Long factionOwnerId = model.selectedFactionProperty().get().getOwnerId();
         return playerService.findPlayer(factionOwnerId)
                 .map(Player::getUserId)
                 .map(id -> id.equals(userId)).orElse(false);
-    }
-
-    private boolean haveCurrentUserRightToAction() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String login = ((UserDetails) principal).getUsername();
-        User user = userService.findUserByLogin(login).orElseThrow(() -> new UsernameNotFoundException("No User With Login \"" + login + "\" Was Found"));
-        return false;
     }
 
     /**
@@ -133,13 +119,6 @@ public class FactionListController {
                 model.playersProperty().addAll(getPlayers(v.getNewValue().getId()));
                 model.cannotDeleteCurrentFactionProperty().set(!isCurrentUserOwnsCurrentFaction());
             }
-        });
-
-        eventBus.subscribe(EventTopics.LOGIN_TOPIC, m -> {
-            System.err.println("LOGGED IN: " + m.getData().loggedInProperty().get());
-            model.currentUserModelProperty().get().loggedInProperty().set(m.getData().loggedInProperty().get());
-            model.currentUserModelProperty().get().userIdProperty().set(m.getData().userIdProperty().get());
-            model.currentUserModelProperty().get().loginProperty().set(m.getData().loginProperty().get());
         });
     }
 
