@@ -5,17 +5,22 @@ import com.canoo.platform.client.javafx.DolphinPlatformApplication;
 //import com.canoo.platform.client.javafx.JavaFXConfiguration;
 import com.canoo.platform.client.javafx.JavaFXConfiguration;
 import com.canoo.platform.core.DolphinRuntimeException;
+import com.google.common.base.CaseFormat;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import name.timoshenko.communityhelper.client.controller.FactionListView;
 import name.timoshenko.communityhelper.client.controller.MainView;
 import name.timoshenko.communityhelper.client.controller.LoginView;
+import name.timoshenko.communityhelper.client.controller.StagedFXMLViewBinder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sun.net.www.protocol.http.HttpURLConnection;
 
 
 //import java.net.HttpURLConnection;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -30,44 +35,42 @@ public class JavaFXClient extends DolphinPlatformApplication {
 
     private Logger LOG = LoggerFactory.getLogger(JavaFXClient.class);
 
+    /**
+     * Эта функция инизиализирует окно (stage) по определённому классу.
+     * <p/>
+     * Требует, чтобы fxml назывался /view/имя_класса_без_view_window.fxml
+     * контроллер должен называться ИМЯ_КЛАССА_БЕЗ_VIEW_CONTROLLER.
+     * <p/>
+     * Пример для FactionListView:
+     * FXML: /view/faction_list_view.fxml
+     * ControllerName: FACTION_LIST_CONTROLLER
+     */
+    private Stage createFxmlView(final ClientContext clientContext,
+                                   final Class<? extends StagedFXMLViewBinder<?>> clazz,
+                                   final Stage stage) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        final String controllerName = CaseFormat.UPPER_CAMEL
+                .to(CaseFormat.UPPER_UNDERSCORE, clazz.getSimpleName().replace("View", "Controller"));
+        final String fxmlName = CaseFormat.UPPER_CAMEL
+                .to(CaseFormat.LOWER_UNDERSCORE, clazz.getSimpleName().replace("View", "Window"));
+        final URL fxmlLocation = clazz.getResource("/view/" + fxmlName + ".fxml");
+        final Constructor<? extends StagedFXMLViewBinder<?>> constructor = clazz.getConstructor(
+                ClientContext.class, String.class, URL.class, Stage.class);
+        final StagedFXMLViewBinder<?> instance = constructor.newInstance(clientContext, controllerName, fxmlLocation, stage);
+        final Scene scene = new Scene(instance.getParent());
+        stage.setScene(scene);
+        return stage;
+    }
+
     @Override
     protected URL getServerEndpoint() throws MalformedURLException {
         return new URL("http://localhost:8080/dolphin");
-        //return new URL("http://localhost:8080");
     }
 
     @Override
     protected void start(Stage mainStage, ClientContext clientContext) throws Exception {
-
-        String clientId = clientContext.getClientId();
-
-        HttpURLConnectionFactory myFactory = url -> {
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            //connection.setRequestProperty("User1", "123");
-            return connection;
-        };
-
-        myFactory.create(getServerEndpoint());
-        ClientConfiguration configuration = new JavaFXConfiguration(getServerEndpoint());
-        configuration.setConnectionFactory(myFactory);
-
-        //final Stage mainStage = new Stage();
-        final MainView mainViewBinder = new MainView(clientContext, mainStage);
-        final Scene mainScene = new Scene(mainViewBinder.getParent());
-        mainStage.setScene(mainScene);
-        mainStage.setOnCloseRequest(e -> System.exit(0));
-        mainStage.show();
-
-        final Stage loginStage = new Stage();
-        final LoginView loginView = new LoginView(clientContext, loginStage);
-        final Scene loginScene = new Scene(loginView.getParent());
-        loginStage.setScene(loginScene);
-        loginStage.setResizable(false);
-        loginStage.initModality(Modality.APPLICATION_MODAL);
-        loginStage.show();
-
-
-
+        createFxmlView(clientContext, MainView.class, mainStage);
+        createFxmlView(clientContext, FactionListView.class, new Stage());
+        createFxmlView(clientContext, LoginView.class, new Stage());
     }
 
     @Override

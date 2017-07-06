@@ -2,62 +2,59 @@ package name.timoshenko.communityhelper.client.controller;
 
 import com.canoo.platform.client.ClientContext;
 import com.canoo.platform.client.ControllerActionException;
-import com.canoo.platform.client.javafx.view.AbstractFXMLViewBinder;
 import javafx.fxml.FXML;
-import javafx.scene.Scene;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
-import name.timoshenko.communityhelper.client.controller.eventViewCommand.MainViewEventCommand;
-import name.timoshenko.communityhelper.common.Constants;
-import name.timoshenko.communityhelper.common.model.CurrentUserModel;
-import name.timoshenko.communityhelper.common.model.MainModel;
+import name.timoshenko.communityhelper.common.model.MainWindowModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 //import java.awt.*;
 
-import java.net.MalformedURLException;
+import java.net.URL;
+
+import static name.timoshenko.communityhelper.common.Constants.TOGGLE_FACTION_WINDOW_ACTION;
 
 /**
  *
  */
-public class MainView extends AbstractFXMLViewBinder<MainModel> {
+public class MainView extends StagedFXMLViewBinder<MainWindowModel> {
 
-    private final Stage ownStage;
-    private final ClientContext clientContext;
-
-    private final MainViewEventCommand mainViewEventCommand;
+    private static final Logger LOG = LoggerFactory.getLogger(MainView.class);
 
     @FXML
     private MenuItem connectMenuItem;
     @FXML
     private MenuItem registrationMenuItem;
     @FXML
+    private MenuItem logoutMenuItem;
+    @FXML
     private MenuItem exitMenuItem;
 
-    public MainView(ClientContext clientContext, Stage ownStage) throws MalformedURLException {
-
-        super(clientContext, Constants.MAIN_CONTROLLER_NAME, MainView.class.getResource("/view/headquarters_main_window.fxml"));
-
-        this.clientContext = clientContext;
-        this.ownStage = ownStage;
-        mainViewEventCommand = new MainViewEventCommand();
+    public MainView(ClientContext clientContext, String controllerName, URL fxmlLocation, Stage stage) {
+        super(clientContext, controllerName, fxmlLocation, stage);
     }
 
     @Override
     protected void init() {
-        //connectMenuItem.setOnAction(e -> invoke(Constants.FACTION_LIST_SHOW_EVENT));
-        connectMenuItem.setOnAction(e -> mainViewEventCommand.FactionListShow(clientContext));
-        exitMenuItem.setOnAction(e -> mainViewEventCommand.ExitApplication());
+        getStage().setOnCloseRequest(e -> System.exit(0));
+        getStage().show();
+
+        // show factions window
+        connectMenuItem.setOnAction(a -> getModel().factionWinowVisibleProperty().set(true));
+        // log out
+        logoutMenuItem.setOnAction(a -> getModel().currentUserModelProperty().get().loggedInProperty().set(false));
     }
 
     @Override
     protected void onInitializationException(Throwable t) {
-        t.printStackTrace();
+        LOG.error("initialization error", t);
         super.onInitializationException(t);
     }
 
     @Override
     protected void onInvocationException(ControllerActionException e) {
-        e.printStackTrace();
+        LOG.error("invocation error", e);
         super.onInvocationException(e);
     }
 }

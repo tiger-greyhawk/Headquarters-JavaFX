@@ -4,14 +4,13 @@ import com.canoo.dolphin.BeanManager;
 import com.canoo.platform.server.DolphinAction;
 import com.canoo.platform.server.DolphinController;
 import com.canoo.platform.server.DolphinModel;
+import com.canoo.platform.server.binding.PropertyBinder;
 import com.canoo.platform.server.event.DolphinEventBus;
 import name.timoshenko.communityhelper.common.Constants;
 import name.timoshenko.communityhelper.common.model.CurrentUserModel;
-import name.timoshenko.communityhelper.common.model.FactionListModel;
-import name.timoshenko.communityhelper.common.model.MainModel;
-import name.timoshenko.communityhelper.server.model.domain.Faction;
+import name.timoshenko.communityhelper.common.model.FactionListWindowModel;
+import name.timoshenko.communityhelper.common.model.MainWindowModel;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 import javax.annotation.PostConstruct;
 
@@ -22,48 +21,24 @@ import javax.annotation.PostConstruct;
 public class MainController {
 
     private final BeanManager beanManager;
+    private final PropertyBinder propertyBinder;
     private final DolphinEventBus eventBus;
 
     @DolphinModel
-    private MainModel model;
+    private MainWindowModel model;
 
 
     @Autowired
-    public MainController(BeanManager beanManager, DolphinEventBus eventBus) {
+    public MainController(BeanManager beanManager, PropertyBinder propertyBinder, DolphinEventBus eventBus) {
         this.beanManager = beanManager;
+        this.propertyBinder = propertyBinder;
         this.eventBus = eventBus;
     }
 
     @PostConstruct
     public void init() {
-        model.currentUserModelProperty().set(beanManager.create(CurrentUserModel.class));
-        model.currentUserModelProperty().get().loggedInProperty().set(false);
-
-
-
-        eventBus.subscribe(EventTopics.LOGIN_TOPIC, m -> {
-            System.err.println("LOGGED IN: " + m.getData().loggedInProperty().get());
-            model.currentUserModelProperty().get().loggedInProperty().set(m.getData().loggedInProperty().get());
-            model.currentUserModelProperty().get().userIdProperty().set(m.getData().userIdProperty().get());
-            model.currentUserModelProperty().get().loginProperty().set(m.getData().loginProperty().get());
-            //model.factionsProperty().setAll(getFactionList(""));
-        });
-
-        /*eventBus.subscribe(EventTopics.FACTION_LIST_SHOW_TOPIC, m -> {
-            System.err.println("Try to show FactionListView: " );
-
-        });*/
+        propertyBinder.bind(model.factionWinowVisibleProperty(), Qualifiers.FACTION_WINDOW_VISIBLE_QUALIFIER);
+        propertyBinder.bind(model.currentUserModelProperty(), Qualifiers.CURRENT_USER_MODEL_QUALIFIER);
     }
 
-    @DolphinAction(Constants.FACTION_LIST_SHOW_EVENT)
-    public void onFactionListShowEvent() {
-        eventBus.publish(EventTopics.FACTION_LIST_SHOW_TOPIC, new FactionListModel());
-
-    }
-
-    /*@DolphinAction
-    public void onFactionListShow()
-    {
-
-    }*/
 }

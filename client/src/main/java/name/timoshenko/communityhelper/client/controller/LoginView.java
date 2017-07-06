@@ -1,29 +1,29 @@
 package name.timoshenko.communityhelper.client.controller;
 
-import com.canoo.platform.client.ClientConfiguration;
 import com.canoo.platform.client.ClientContext;
 import com.canoo.platform.client.ControllerActionException;
-import com.canoo.platform.client.HttpURLConnectionFactory;
+import com.canoo.platform.client.javafx.DolphinPlatformApplication;
 import com.canoo.platform.client.javafx.FXBinder;
-import com.canoo.platform.client.javafx.JavaFXConfiguration;
-import com.canoo.platform.client.javafx.view.AbstractFXMLViewBinder;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import name.timoshenko.communityhelper.common.Constants;
-import name.timoshenko.communityhelper.common.model.CurrentUserModel;
-import sun.net.www.protocol.http.HttpURLConnection;
+import name.timoshenko.communityhelper.common.model.LoginWindowModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 
 
 /**
  *
  */
-public class LoginView extends AbstractFXMLViewBinder<CurrentUserModel> {
+public class LoginView extends StagedFXMLViewBinder<LoginWindowModel> {
+
+    private static final Logger LOG = LoggerFactory.getLogger(LoginView.class);
 
     @FXML
     private CheckBox loggedInCheckbox;
@@ -32,53 +32,50 @@ public class LoginView extends AbstractFXMLViewBinder<CurrentUserModel> {
     private Button loginButton;
 
     @FXML
+    private Button quitButton;
+
+    @FXML
     private TextField loginText;
+
     @FXML
     private TextField passwordText;
 
-    private final Stage ownStage;
-
-    /**
-     * Constructor
-     *
-     * @param clientContext  the DOlphin Platform client context
-     */
-    public LoginView(ClientContext clientContext, Stage ownStage) {
-
-        super(clientContext, Constants.LOGIN_CONTROLLER_NAME, LoginView.class.getResource("/view/login_window.fxml"));
-
-        this.ownStage = ownStage;
+    public LoginView(ClientContext clientContext, String controllerName, URL fxmlLocation, Stage stage) {
+        super(clientContext, controllerName, fxmlLocation, stage);
     }
-
 
 
     @Override
     protected void init() {
-        FXBinder.bind(loginText.textProperty()).bidirectionalTo(getModel().loginProperty());
-        FXBinder.bind(passwordText.textProperty()).bidirectionalTo(getModel().passwordProperty());
+        getStage().initModality(Modality.APPLICATION_MODAL);
+        getStage().show();
 
-        // уверен, что диалог закрывается, не уверен, что он откроется. )
-        getModel().loggedInProperty().onChanged(evt -> {
-            System.out.println("LoggedInProperty value changed: " + evt.getOldValue() + "->" + evt.getNewValue());
+        // show/hide the window automagicly when corresponding property is being modified
+        getModel().currentUserModelProperty().get().loggedInProperty().onChanged(evt -> {
             if (Boolean.FALSE.equals(evt.getNewValue())) {
-                ownStage.show();
+                getStage().show();
             } else {
-                ownStage.hide();
+                getStage().hide();
             }
         });
+
+        FXBinder.bind(loginText.textProperty()).bidirectionalTo(getModel().currentUserModelProperty().get().loginProperty());
+        FXBinder.bind(passwordText.textProperty()).bidirectionalTo(getModel().currentUserModelProperty().get().passwordProperty());
+
         getParent().getScene().getWindow().setOnCloseRequest(e -> System.exit(0));
+        quitButton.setOnAction(e -> System.exit(0));
         loginButton.setOnAction(e -> invoke(Constants.LOGIN_EVENT));
     }
 
     @Override
     protected void onInitializationException(Throwable t) {
-        t.printStackTrace();
+        LOG.error("initialization error", t);
         super.onInitializationException(t);
     }
 
     @Override
     protected void onInvocationException(ControllerActionException e) {
-        e.printStackTrace();
+        LOG.error("invocation error", e);
         super.onInvocationException(e);
     }
 }

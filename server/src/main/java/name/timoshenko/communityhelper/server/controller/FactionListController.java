@@ -3,10 +3,11 @@ package name.timoshenko.communityhelper.server.controller;
 import com.canoo.dolphin.BeanManager;
 import com.canoo.platform.server.DolphinController;
 import com.canoo.platform.server.DolphinModel;
+import com.canoo.platform.server.binding.PropertyBinder;
 import com.canoo.platform.server.event.DolphinEventBus;
 import name.timoshenko.communityhelper.common.Constants;
 import name.timoshenko.communityhelper.common.model.CurrentUserModel;
-import name.timoshenko.communityhelper.common.model.FactionListModel;
+import name.timoshenko.communityhelper.common.model.FactionListWindowModel;
 import name.timoshenko.communityhelper.common.model.FactionModel;
 import name.timoshenko.communityhelper.common.model.PlayerModel;
 import name.timoshenko.communityhelper.server.model.domain.Faction;
@@ -25,7 +26,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import javax.annotation.PostConstruct;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,12 +39,11 @@ public class FactionListController {
     private final FactionService factionService;
     private final FactionPlayerService factionPlayerService;
     private final PlayerService playerService;
-    private final UserService userService;
     private final BeanManager beanManager;
-    private final DolphinEventBus eventBus;
+    private final PropertyBinder propertyBinder;
 
     @DolphinModel
-    private FactionListModel model;
+    private FactionListWindowModel model;
 
     /**
      * Тут всё ижектится с помощью spring-а.
@@ -53,21 +52,16 @@ public class FactionListController {
     public FactionListController(@Qualifier("cachedFactionService") FactionService factionService,
                                  FactionPlayerService factionPlayerService,
                                  PlayerService playerService,
-                                 UserService userService,
                                  BeanManager beanManager,
-                                 DolphinEventBus eventBus) {
+                                 PropertyBinder propertyBinder) {
         this.factionService = factionService;
         this.factionPlayerService = factionPlayerService;
         this.playerService = playerService;
-        this.userService = userService;
         this.beanManager = beanManager;
-        this.eventBus = eventBus;
+        this.propertyBinder = propertyBinder;
     }
 
     private Collection<FactionModel> getFactionList(final String filter) {
-
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) return Collections.EMPTY_LIST;
         final List<Faction> factions = factionService.getFactions(filter);
         return factions.stream()
                 .map(faction -> {
@@ -80,9 +74,6 @@ public class FactionListController {
                     );
                     return factionModel;
                 }).collect(Collectors.toList());
-
-
-
     }
 
     private Collection<PlayerModel> getPlayers(final Long factionId) {
@@ -99,9 +90,6 @@ public class FactionListController {
     }
 
     private boolean isCurrentUserOwnsCurrentFaction() {
-        Object principal =  SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        //String principalName = ((UserDetails)principal).getUsername();
-        CurrentUserModel currentUser = model.currentUserModelProperty().get();
         final Long userId = model.currentUserModelProperty().get().userIdProperty().get();
         final Long factionOwnerId = model.selectedFactionProperty().get().getOwnerId();
         return playerService.findPlayer(factionOwnerId)
@@ -109,23 +97,14 @@ public class FactionListController {
                 .map(id -> id.equals(userId)).orElse(false);
     }
 
-    private boolean haveCurrentUserRightToAction()
-    {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String login = ((UserDetails)principal).getUsername();
-        User user = userService.findUserByLogin(login).orElseThrow(() -> new UsernameNotFoundException("No User With Login \"" + login + "\" Was Found"));
-        return false;
-    }
-
     /**
      * Метод, выполняющийся при подключении клиента и выполняющий основную приязку к событиям.
      */
     @PostConstruct
     public void init() {
+        propertyBinder.bind(model.windowVisibleProperty(), Qualifiers.FACTION_WINDOW_VISIBLE_QUALIFIER);
+        propertyBinder.bind(model.currentUserModelProperty(), Qualifiers.CURRENT_USER_MODEL_QUALIFIER);
 
-        //TODO здесь мы создаем новую модель Юзера. А надо подсовывать существующую уже авторизованного на данный момент.
-        //model.currentUserModelProperty().set(beanManager.create(CurrentUserModel.class));
-        //model.currentUserModelProperty().get().loggedInProperty().set(false);
         model.factionsProperty().addAll(getFactionList(""));
         model.filterProperty().onChanged(v -> {
                     model.factionsProperty().clear();
@@ -140,13 +119,6 @@ public class FactionListController {
                 model.playersProperty().addAll(getPlayers(v.getNewValue().getId()));
                 model.cannotDeleteCurrentFactionProperty().set(!isCurrentUserOwnsCurrentFaction());
             }
-        });
-
-        eventBus.subscribe(EventTopics.LOGIN_TOPIC, m -> {
-            System.err.println("LOGGED IN: " + m.getData().loggedInProperty().get());
-            model.currentUserModelProperty().get().loggedInProperty().set(m.getData().loggedInProperty().get());
-            model.currentUserModelProperty().get().userIdProperty().set(m.getData().userIdProperty().get());
-            model.currentUserModelProperty().get().loginProperty().set(m.getData().loginProperty().get());
         });
     }
 

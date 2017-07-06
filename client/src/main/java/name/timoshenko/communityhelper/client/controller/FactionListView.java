@@ -12,19 +12,17 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import name.timoshenko.communityhelper.common.Constants;
-import name.timoshenko.communityhelper.common.model.FactionListModel;
+import name.timoshenko.communityhelper.common.model.FactionListWindowModel;
 import name.timoshenko.communityhelper.common.model.FactionModel;
 import name.timoshenko.communityhelper.common.model.PlayerModel;
 
-import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  *
  */
-public class FactionListView extends AbstractFXMLViewBinder<FactionListModel> {
+public class FactionListView extends StagedFXMLViewBinder<FactionListWindowModel> {
 
-
-    private final Stage ownStage;
 
     @FXML
     private TextField factionFilterPattern;
@@ -47,14 +45,25 @@ public class FactionListView extends AbstractFXMLViewBinder<FactionListModel> {
     @FXML
     private TextField loginProperty;
 
-    public FactionListView(ClientContext clientContext, Stage ownStage) //throws MalformedURLException
-    {
-        super(clientContext, Constants.FACTION_LIST_CONTROLLER_NAME, FactionListView.class.getResource("/view/faction_list_window.fxml"));
-        this.ownStage = ownStage;
+    public FactionListView(ClientContext clientContext, String controllerName, URL fxmlLocation, Stage stage) {
+        super(clientContext, controllerName, fxmlLocation, stage);
     }
 
     @Override
     public void init() {
+        // изначально окно не показано
+        getStage().hide();
+        // при изменении значения переменной показывать или скрывать окно
+        getModel().windowVisibleProperty().onChanged(v -> {
+            if (Boolean.TRUE.equals(v.getNewValue())) {
+                getStage().show();
+            } else  {
+                getStage().hide();
+            }
+        });
+        // при закрытии окна -- выставить переменную в false
+        getStage().setOnCloseRequest(event -> getModel().windowVisibleProperty().set(false));
+
         factionTableNameColumn.setCellValueFactory(e -> FXWrapper.wrapObjectProperty(e.getValue().nameProperty()));
         factionTableOwnerColumn.setCellValueFactory(e -> FXWrapper.wrapObjectProperty(e.getValue().ownerNameProperty()));
 
@@ -69,10 +78,12 @@ public class FactionListView extends AbstractFXMLViewBinder<FactionListModel> {
         FXBinder.bind(factionPlayersTableView.getItems())
                 .bidirectionalTo(getModel().playersProperty());
 
-        FXBinder.bind(loginProperty.textProperty())
-                .bidirectionalTo(getModel().currentUserModelProperty().get().loginProperty());
 
-
+        // looks ugly but when init method runs, currentUserModelProperty is returning "null",
+        // causing NullPointerException.
+        // it will be initialized with an object once and only once (in LoginView) and will be attached at that exact time.
+        getModel().currentUserModelProperty().onChanged(v -> FXBinder.bind(loginProperty.textProperty())
+                .bidirectionalTo(getModel().currentUserModelProperty().get().loginProperty()));
 
         deleteFactionButton.setDisable(true);
         FXBinder.bind(deleteFactionButton.disableProperty())

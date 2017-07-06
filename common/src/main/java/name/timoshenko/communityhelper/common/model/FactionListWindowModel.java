@@ -10,7 +10,9 @@ import java.io.Serializable;
  *
  */
 @DolphinBean
-public class FactionListModel implements Serializable {
+public class FactionListWindowModel implements Serializable {
+
+    private Property<Boolean> windowVisible;
 
     private Property<CurrentUserModel> currentUser;
 
@@ -25,6 +27,10 @@ public class FactionListModel implements Serializable {
     private Property<PlayerModel> selectedPlayer;
 
     private Property<Boolean> canDeleteCurrentFaction;
+
+    public Property<Boolean> windowVisibleProperty() {
+        return windowVisible;
+    }
 
     public Property<CurrentUserModel> currentUserModelProperty() {
         return currentUser;
