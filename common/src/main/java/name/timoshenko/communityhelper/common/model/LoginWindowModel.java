@@ -10,7 +10,12 @@ import com.canoo.dolphin.mapping.Property;
 public class LoginWindowModel {
     private Property<CurrentUserModel> currentUserModel;
 
+    private Property<String> message;
+
     public Property<CurrentUserModel> currentUserModelProperty() {
         return currentUserModel;
+    }
+    public Property<String> messageProperty() {
+        return message;
     }
 }
