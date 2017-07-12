@@ -10,6 +10,7 @@ import name.timoshenko.communityhelper.common.model.CurrentUserModel;
 import name.timoshenko.communityhelper.common.model.FactionListWindowModel;
 import name.timoshenko.communityhelper.common.model.FactionModel;
 import name.timoshenko.communityhelper.common.model.PlayerModel;
+import name.timoshenko.communityhelper.server.controller.Security.UserDetailsServiceDolphin;
 import name.timoshenko.communityhelper.server.model.domain.Faction;
 import name.timoshenko.communityhelper.server.model.domain.Player;
 import name.timoshenko.communityhelper.server.model.domain.User;
@@ -19,9 +20,16 @@ import name.timoshenko.communityhelper.server.model.service.PlayerService;
 import name.timoshenko.communityhelper.server.model.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.util.Collection;
@@ -39,11 +47,18 @@ public class FactionListController {
     private final FactionService factionService;
     private final FactionPlayerService factionPlayerService;
     private final PlayerService playerService;
+    //private final UserDetailsService userService;
     private final BeanManager beanManager;
     private final PropertyBinder propertyBinder;
 
     @DolphinModel
     private FactionListWindowModel model;
+
+    //@Autowired
+    //UserDetailsService userDetailsService;
+
+    //@Autowired
+    //PlayerService playerService;
 
     /**
      * Тут всё ижектится с помощью spring-а.
@@ -52,14 +67,18 @@ public class FactionListController {
     public FactionListController(@Qualifier("cachedFactionService") FactionService factionService,
                                  FactionPlayerService factionPlayerService,
                                  PlayerService playerService,
+                                 //UserDetailsService userService,
                                  BeanManager beanManager,
                                  PropertyBinder propertyBinder) {
         this.factionService = factionService;
         this.factionPlayerService = factionPlayerService;
         this.playerService = playerService;
+        //this.userService = userService;
         this.beanManager = beanManager;
         this.propertyBinder = propertyBinder;
     }
+
+
 
     private Collection<FactionModel> getFactionList(final String filter) {
         final List<Faction> factions = factionService.getFactions(filter);
@@ -69,6 +88,12 @@ public class FactionListController {
                     factionModel.idProperty().set(faction.getId());
                     factionModel.nameProperty().set(faction.getName());
                     factionModel.ownerIdProperty().set(faction.getOwnerId());
+                    //model.currentUserModelProperty().set(beanManager.create(CurrentUserModel.class));
+                    //model.currentUserModelProperty().get().loggedInProperty().set(true);
+                    //model.currentUserModelProperty().get().userIdProperty().set(1L);
+                    //model.currentUserModelProperty().get().loginProperty().set("user1");
+                    //model.currentUserModelProperty().get().passwordProperty().set(null);
+                    //CurrentUserModel user = model.currentUserModelProperty().get();
                     factionModel.ownerNameProperty().set(
                             playerService.findPlayer(faction.getOwnerId()).map(Player::getNick).orElse("")
                     );
@@ -76,6 +101,9 @@ public class FactionListController {
                 }).collect(Collectors.toList());
     }
 
+    //@Secured(value = {"ROLE_ADMIN"})
+    //@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")    ///   <<<<  здесь не работает. Работает только в сервисах. о.0
     private Collection<PlayerModel> getPlayers(final Long factionId) {
         final List<Long> factionPlayersIds = factionPlayerService.findPlayersByFactionId(factionId).stream().collect(Collectors.toList());
         final List<Player> factionPlayers = playerService.getPlayers(factionPlayersIds);
@@ -90,12 +118,36 @@ public class FactionListController {
     }
 
     private boolean isCurrentUserOwnsCurrentFaction() {
+        //if (model.currentUserModelProperty().get() != null)
+            //model.currentUserModelProperty().set(setUserFromContext(model.currentUserModelProperty().get()));
         final Long userId = model.currentUserModelProperty().get().userIdProperty().get();
         final Long factionOwnerId = model.selectedFactionProperty().get().getOwnerId();
+        UserDetailsServiceDolphin userDetails = (UserDetailsServiceDolphin) SecurityContextHolder.getContext().getAuthentication().getDetails();
+        CurrentUserModel user = model.currentUserModelProperty().get();
+
         return playerService.findPlayer(factionOwnerId)
                 .map(Player::getUserId)
                 .map(id -> id.equals(userId)).orElse(false);
     }
+
+    /*private boolean haveCurrentUserRightToAction()
+    {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String login = ((UserDetails)principal).getUsername();
+        //User user = userService.loadUserByUsername(login).orElseThrow(() -> new UsernameNotFoundException("No User With Login \"" + login + "\" Was Found"));
+        return false;
+    }*/
+
+    /*private CurrentUserModel setUserFromContext(CurrentUserModel springSecurityUserModel)
+    {
+        if (springSecurityUserModel == null) return null;
+        UserDetails user = userDetailsService.loadUserByUsername(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+                //.orElseThrow(() -> new UsernameNotFoundException("No User Was Found From Context. What Dumn"));
+        //springSecurityUserModel.loginProperty().set(user.getLogin());
+        //springSecurityUserModel.userIdProperty().set(user.getId());
+        springSecurityUserModel.loggedInProperty().set(SecurityContextHolder.getContext().getAuthentication().isAuthenticated());
+        return springSecurityUserModel;
+    }*/
 
     /**
      * Метод, выполняющийся при подключении клиента и выполняющий основную приязку к событиям.
@@ -104,6 +156,8 @@ public class FactionListController {
     public void init() {
         propertyBinder.bind(model.windowVisibleProperty(), Qualifiers.FACTION_WINDOW_VISIBLE_QUALIFIER);
         propertyBinder.bind(model.currentUserModelProperty(), Qualifiers.CURRENT_USER_MODEL_QUALIFIER);
+        //if (model.currentUserModelProperty().get() != null)
+            //model.currentUserModelProperty().set(setUserFromContext(model.currentUserModelProperty().get()));
 
         model.factionsProperty().addAll(getFactionList(""));
         model.filterProperty().onChanged(v -> {

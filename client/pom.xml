@@ -23,6 +23,11 @@
             <artifactId>dolphin-platform-rpm-client-javafx</artifactId>
             <version>0.15.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>RELEASE</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -33,7 +38,17 @@
                 <version>8.6.0</version>
                 <configuration>
                     <mainClass>name.timoshenko.communityhelper.client.JavaFXClient</mainClass>
+                    <vendor>Roman Timoshenko</vendor>
                 </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                            <goal>native</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

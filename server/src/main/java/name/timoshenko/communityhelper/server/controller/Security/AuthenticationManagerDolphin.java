@@ -1,8 +1,10 @@
 package name.timoshenko.communityhelper.server.controller.Security;
 
 import name.timoshenko.communityhelper.server.model.domain.User;
+import name.timoshenko.communityhelper.server.model.domain.UserRole;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -28,17 +30,19 @@ public class AuthenticationManagerDolphin implements AuthenticationManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationManagerDolphin.class);
 
-    private final UserDetailsService userDetailsService;
+    @Autowired
+    UserDetailsServiceDolphin userDetailsService;
+    //private final UserDetailsServiceDolphin userDetailsService;
 
-    public AuthenticationManagerDolphin(UserDetailsService userDetailsService) {
+    public AuthenticationManagerDolphin(UserDetailsServiceDolphin userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
 
-    static final List<GrantedAuthority> AUTHORITIES = new ArrayList<GrantedAuthority>();
+    //static final List<GrantedAuthority> AUTHORITIES = new ArrayList<GrantedAuthority>();
 
-    static {
+    /*static {
         AUTHORITIES.add(new SimpleGrantedAuthority("ROLE_USER"));
-    }
+    }*/
 
     public Authentication authenticate(Authentication auth) throws AuthenticationException {
         //if (auth.getName().equals(auth.getCredentials()))
@@ -48,8 +52,11 @@ public class AuthenticationManagerDolphin implements AuthenticationManager {
         if (userToAuth.getPassword().equals(auth.getCredentials()))
         {
             LOGGER.info("авторизовался пользователь "+ auth.getPrincipal().toString());
-            return new UsernamePasswordAuthenticationToken(auth.getName(),
-                    auth.getCredentials(), AUTHORITIES);
+            /*for (UserRole role : userToAuth.getAuthorities()){
+                AUTHORITIES.add(new SimpleGrantedAuthority(role.getName()));
+            }*/
+            return new UsernamePasswordAuthenticationToken(userToAuth.getUsername(),
+                    userToAuth.getPassword(), userToAuth.getAuthorities());
         }
         throw new BadCredentialsException("Bad Credentials");
     }

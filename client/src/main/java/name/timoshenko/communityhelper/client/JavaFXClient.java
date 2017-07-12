@@ -6,8 +6,18 @@ import com.canoo.platform.client.javafx.DolphinPlatformApplication;
 import com.canoo.platform.client.javafx.JavaFXConfiguration;
 import com.canoo.platform.core.DolphinRuntimeException;
 import com.google.common.base.CaseFormat;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
+import javafx.stage.Popup;
+import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
 import name.timoshenko.communityhelper.client.controller.FactionListView;
 import name.timoshenko.communityhelper.client.controller.MainView;
@@ -71,6 +81,7 @@ public class JavaFXClient extends DolphinPlatformApplication {
         createFxmlView(clientContext, MainView.class, mainStage);
         createFxmlView(clientContext, FactionListView.class, new Stage());
         createFxmlView(clientContext, LoginView.class, new Stage());
+
     }
 
     @Override

@@ -8,6 +8,8 @@ import javafx.stage.Stage;
 import name.timoshenko.communityhelper.common.model.MainWindowModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.annotation.Secured;
+
 
 //import java.awt.*;
 
@@ -35,6 +37,7 @@ public class MainView extends StagedFXMLViewBinder<MainWindowModel> {
         super(clientContext, controllerName, fxmlLocation, stage);
     }
 
+
     @Override
     protected void init() {
         getStage().setOnCloseRequest(e -> System.exit(0));
@@ -44,6 +47,8 @@ public class MainView extends StagedFXMLViewBinder<MainWindowModel> {
         connectMenuItem.setOnAction(a -> getModel().factionWinowVisibleProperty().set(true));
         // log out
         logoutMenuItem.setOnAction(a -> getModel().currentUserModelProperty().get().loggedInProperty().set(false));
+        // exit app
+        exitMenuItem.setOnAction(a -> System.exit(0));
     }
 
     @Override

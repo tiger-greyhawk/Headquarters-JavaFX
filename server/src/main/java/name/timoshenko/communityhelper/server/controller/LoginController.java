@@ -5,6 +5,7 @@ import com.canoo.platform.server.DolphinAction;
 import com.canoo.platform.server.DolphinController;
 import com.canoo.platform.server.DolphinModel;
 import com.canoo.platform.server.binding.PropertyBinder;
+import com.sun.xml.internal.ws.api.policy.PolicyResolver;
 import name.timoshenko.communityhelper.common.Constants;
 import name.timoshenko.communityhelper.common.model.CurrentUserModel;
 import name.timoshenko.communityhelper.common.model.LoginWindowModel;
@@ -13,6 +14,7 @@ import name.timoshenko.communityhelper.server.model.service.AuthService;
 import name.timoshenko.communityhelper.server.model.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.annotation.PostConstruct;
 import java.util.Optional;
@@ -42,6 +44,8 @@ public class LoginController {
         this.propertyBinder = propertyBinder;
         this.userService = userService;
     }
+
+
 
     @PostConstruct
     public void init() {

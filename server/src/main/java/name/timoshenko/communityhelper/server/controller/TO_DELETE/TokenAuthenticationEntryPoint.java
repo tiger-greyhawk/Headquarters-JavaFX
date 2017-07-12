@@ -4,16 +4,16 @@ import name.timoshenko.communityhelper.server.controller.TO_DELETE.TokenAuthenti
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+//import javax.servlet.ServletException;
+//import javax.servlet.http.HttpServletRequest;
+//import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
  * Created by Tiger on 30.06.2017.
  */
-public class TokenAuthenticationEntryPoint implements AuthenticationEntryPoint {
-
+public class TokenAuthenticationEntryPoint{// implements AuthenticationEntryPoint {
+/*
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         if (authException instanceof TokenAuthenticationHeaderNotFound) {
@@ -22,5 +22,5 @@ public class TokenAuthenticationEntryPoint implements AuthenticationEntryPoint {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
         }
     }
-
+*/
 }
