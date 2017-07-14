@@ -28,7 +28,7 @@ public class BasicAuthService implements AuthService {
 
     @Override
     public boolean isAuthenticated(String login, String passwordHash) {
-        boolean equ = userService.findUserByLogin(login).map(User::getPasswordHash).map(s -> s.equals(passwordHash)).orElse(false);
+
         try {
             Authentication request = new UsernamePasswordAuthenticationToken(login, passwordHash);
             Authentication result = authenticationManager.authenticate(request);

@@ -5,7 +5,7 @@ import com.canoo.platform.server.DolphinAction;
 import com.canoo.platform.server.DolphinController;
 import com.canoo.platform.server.DolphinModel;
 import com.canoo.platform.server.binding.PropertyBinder;
-import com.sun.xml.internal.ws.api.policy.PolicyResolver;
+//import com.sun.xml.internal.ws.api.policy.PolicyResolver;
 import name.timoshenko.communityhelper.common.Constants;
 import name.timoshenko.communityhelper.common.model.CurrentUserModel;
 import name.timoshenko.communityhelper.common.model.LoginWindowModel;

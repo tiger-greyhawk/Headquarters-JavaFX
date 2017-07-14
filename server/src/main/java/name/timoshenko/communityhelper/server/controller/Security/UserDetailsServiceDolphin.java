@@ -31,7 +31,7 @@ public class UserDetailsServiceDolphin implements UserDetailsService {
 
     @Autowired
     UserRepository userRepository;
-    //private final UserRepository userRepository;
+
     @Autowired
     UserDetailsServiceDolphin() {
         //this.userRepository = userRepository;
@@ -43,16 +43,11 @@ public class UserDetailsServiceDolphin implements UserDetailsService {
         User user = userRepository.findOneByLogin(login)
                 .orElseThrow(() -> new UsernameNotFoundException("No User With Login \"" + login + "\" Was Found"));
 
-        //Collection<UserRole> grantedAuthorities = new HashSet<>();
-        //SimpleGrantedAuthority authority = user.getAuthorities();
         Collection<GrantedAuthority>  grantedAuthorities = new HashSet<>();
         for (UserRole userRole : user.getAuthorities()) {
-        grantedAuthorities.add(new SimpleGrantedAuthority(userRole.getName()));
+            grantedAuthorities.add(new SimpleGrantedAuthority(userRole.getName()));
         }
-
-
         return new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPasswordHash(), grantedAuthorities);
-        //return user;
     }
 
 

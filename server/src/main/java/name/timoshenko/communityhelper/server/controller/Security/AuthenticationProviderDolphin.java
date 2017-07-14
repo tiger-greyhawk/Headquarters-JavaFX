@@ -31,8 +31,6 @@ public class AuthenticationProviderDolphin implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication auth) throws AuthenticationException {
-        //if (auth.getName().equals(auth.getCredentials()))
-        //if (auth.getName() != null)
         UserDetails userToAuth = userDetailsService.loadUserByUsername(auth.getName());
         if (userToAuth == null) throw new BadCredentialsException("Bad Credentials");
         if (userToAuth.getPassword().equals(auth.getCredentials()))

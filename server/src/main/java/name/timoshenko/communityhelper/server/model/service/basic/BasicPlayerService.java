@@ -1,10 +1,8 @@
 package name.timoshenko.communityhelper.server.model.service.basic;
 
 import name.timoshenko.communityhelper.server.model.domain.Player;
-import name.timoshenko.communityhelper.common.model.CurrentUserModel;
 import name.timoshenko.communityhelper.server.model.repositories.PlayerRepository;
 import name.timoshenko.communityhelper.server.model.service.PlayerService;
-import org.springframework.data.repository.query.Param;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.method.P;
 import org.springframework.security.access.prepost.PostFilter;
@@ -28,28 +26,36 @@ public class BasicPlayerService implements PlayerService {
         this.playerRepository = playerRepository;
     }
 
+
+    /***
+     * Доступны аннотации вида @Secured, @(Pre)(Post)Authorize, @(Pre)(Post)Filter  (как для всего сервиса, так и для отдельных методов)
+     * Secured - только проверка обладания правами (не обязательно ролями)
+     * Authorize -
+     * Filter - для применения фильтра при выборке коллекции.
+     * Examples: @PreAuthorize("#user.name == principal.username") тогда надо принимать параметр в методе:
+     * public Optional<Player> findPlayer(long id, @P("user") User user)
+     *
+     * @PreAuthorize("hasRole('ROLE_USER')") - просто проверка обладания ролью.
+     * @PreAuthorize("hasPermission(#player, 'user')") - Возможно также проверять каждый возвращаемый объект на права для текущего, к примеру, пользователя. Так ли это?
+     * @PostFilter("hasRole('ROLE_USER') or filterObject.assignee == authentication.name") - с фильтром. Не разобрался. Применяется только для коллекций.
+     * @PreFilter("hasRole('ROLE_USER')") -
+     * @PostFilter("hasPermission(filterObject, 'read') or hasPermission(filterObject, 'admin')")
+     *
+     * Более подробно в документации здесь: https://docs.spring.io/spring-security/site/docs/current/reference/html/el-access.html
+     */
+
+
     @Override
-    //@PreAuthorize("#user")
-    //@PreAuthorize("hasRole('ROLE_USER')")
-    //@PostFilter("hasRole('ROLE_USER') or filterObject.assignee == authentication.name")
-    //@PreFilter("hasRole('ROLE_USER')")
-    //@PostFilter("hasPermission(filterObject, 'read') or hasPermission(filterObject, 'admin')")
-    //public Optional<Player> findPlayer(long id, @P("user") String user) {
     public Optional<Player> findPlayer(long id) {
-        //if (user == "") return null;
-        //if (user == "user1") return Optional.ofNullable(playerRepository.findOne(id));
-        //if (user != "user1") return Optional.ofNullable(playerRepository.findOne(1L));
         return Optional.ofNullable(playerRepository.findOne(id));
     }
-
-    //@Secured(value = {"ROLE_ADMIN"})
 
     @Override
     //@PostFilter("hasRole('ROLE_ADMIN')")
     //@Secured({"ROLE_USER", "ACL_REPORT_ACCEPT"})
     @Secured({"ACL_REPORT_ACCEPT"})
-    public List<Player> getPlayers(List<Long> id) {
-        return playerRepository.findAll(id);
+    public List<Player> getPlayers(List<Long> ids) {
+        return playerRepository.findAll(ids);
     }
 
 

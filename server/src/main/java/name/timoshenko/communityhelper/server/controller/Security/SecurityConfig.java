@@ -34,6 +34,13 @@ import java.util.Optional;
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true)
 //public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //public class SecurityConfig extends SecurityConfigurerAdapter {
+
+
+/***
+ * На самом деле конфигуратор с http нам почти не нужен. Нужно конфигурировать через AuthenticationManagerBuilder.
+ *
+ * Аутентифицируемся через authenticationManager.  В authenticationProvider не заходим. Не понимаю пока систему конфигурации.
+ */
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -43,16 +50,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .authorizeRequests()
                 .antMatchers("/", "/dolphin").permitAll()
-                .antMatchers("/dolphin/view/*").permitAll()//.hasAnyRole("ROLE_USER")
-                .antMatchers("/dolphin/media/**").hasAnyRole("ROLE_ADMIN")
+                //.antMatchers("/dolphin/view/*").permitAll()//.hasAnyRole("ROLE_USER")
+                //.antMatchers("/dolphin/media/**").hasAnyRole("ROLE_ADMIN")
                 .anyRequest().authenticated();
     }
 
 
 
-    //@Override
-    //@Bean
-    @Autowired
+    @Override
+    //@Autowired
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         //auth.inMemoryAuthentication().withUser("user1").password("123").roles("USER");
         //auth.jdbcAuthentication()
@@ -61,41 +67,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.parentAuthenticationManager(authenticationManager);
     }
 
-    /*@Bean(name = "authenticationProvider")
-    public AuthenticationProvider authenticationProvider() {
-        AuthenticationProviderDolphin authenticationProviderDolphin = new AuthenticationProviderDolphin(userDetailsService);
-        return authenticationProviderDolphin;
-    }*/
-
-
     @Autowired
     AuthenticationProviderDolphin authenticationProvider;
 
-/*    @Bean(name = "authenticationManager")
-    //@Override
-    public AuthenticationManager authenticationManager() throws Exception {
-        return super.authenticationManager();
-    }
-*/
-    /*@Bean
-    //@Override
-    public AuthenticationManager authenticationManager() throws Exception{
-        return new AuthenticationManagerDolphin(userDetailsService);
-    }*/
-
-    @Autowired AuthenticationManagerDolphin authenticationManager;
-
-    //@Autowired
-    //UserDetailsServiceDolphin userDetailsService;
-
+    @Autowired
+    AuthenticationManagerDolphin authenticationManager;
 
     @Bean(name = "userDetailsService")
     public UserDetailsService userDetailsService() {
         return new UserDetailsServiceDolphin();
     }
-
-/*
-    @Autowired
-    public UserRepository userRepository;
-    */
 }

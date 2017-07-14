@@ -14,7 +14,7 @@ import org.springframework.security.acls.model.*;
 import org.springframework.security.acls.domain.AccessControlEntryImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+//import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * http://grzegorzborkowski.blogspot.ru/2008/10/spring-security-acl-very-basic-tutorial.html
@@ -59,12 +59,6 @@ public class InMemoryAclServiceImpl implements AclService {
         throw new UnsupportedOperationException("Not implemented");
     }
 
-    /*public Acl readAclById(ObjectIdentity object, Sid[] sids) throws NotFoundException {
-        Map<ObjectIdentity, Acl> map = readAclsById(new ObjectIdentity[] { object }, sids);
-        Assert.isTrue(map.containsKey(object), "There should have been an Acl entry for ObjectIdentity " + object);
-
-        return map.get(object);
-    }*/
 
     @Override
     public Acl readAclById(ObjectIdentity object) throws NotFoundException {
@@ -72,8 +66,8 @@ public class InMemoryAclServiceImpl implements AclService {
     }
 
     @Override
-    public Acl readAclById(ObjectIdentity objectIdentity, List<Sid> list) throws NotFoundException {
-        Map<ObjectIdentity, Acl> map = readAclsById(new ArrayList<ObjectIdentity>() , list);
+    public Acl readAclById(ObjectIdentity objectIdentity, List<Sid> sids) throws NotFoundException {
+        Map<ObjectIdentity, Acl> map = readAclsById(new ArrayList<ObjectIdentity>() , sids);
         Assert.isTrue(map.containsKey(objectIdentity), "There should have been an Acl entry for ObjectIdentity " + objectIdentity);
 
         return map.get(objectIdentity);
@@ -85,7 +79,7 @@ public class InMemoryAclServiceImpl implements AclService {
     }
 
     @Override
-    public Map<ObjectIdentity, Acl> readAclsById(List<ObjectIdentity> list, List<Sid> list1) throws NotFoundException {
+    public Map<ObjectIdentity, Acl> readAclsById(List<ObjectIdentity> list, List<Sid> sids) throws NotFoundException {
         Map<ObjectIdentity, Acl> result = new HashMap<ObjectIdentity, Acl>();
 
         for (ObjectIdentity object : list) {
@@ -98,23 +92,5 @@ public class InMemoryAclServiceImpl implements AclService {
 
         return result;
     }
-
-    /*public Map<ObjectIdentity, Acl> readAclsById(ObjectIdentity[] objects) throws  NotFoundException {
-        return readAclsById(objects, null);
-    }*/
-
-    /*public Map<ObjectIdentity, Acl> readAclsById(ObjectIdentity[] objects, Sid[] sids) throws NotFoundException {
-        Map<ObjectIdentity, Acl> result = new HashMap<ObjectIdentity, Acl>();
-
-        for (ObjectIdentity object : objects) {
-            if (acls.containsKey(object)) {
-                result.put(object, acls.get(object));
-            } else {
-                throw new NotFoundException("Unable to find ACL information for object identity '" + object.toString() + "'");
-            }
-        }
-
-        return result;
-    }*/
 
 }

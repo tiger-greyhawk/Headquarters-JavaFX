@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 import name.timoshenko.communityhelper.common.model.MainWindowModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.access.annotation.Secured;
+
 
 
 //import java.awt.*;

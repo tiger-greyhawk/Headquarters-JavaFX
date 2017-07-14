@@ -49,8 +49,10 @@ insert into user_roles (user_id, role_id) values
 /*
 //Tables of acl from http://docs.spring.io/spring-security/site/docs/4.2.3.RELEASE/reference/htmlsingle/#dbschema-acl
 
+Заготовки для таблиц spring-security-acl.
+
 insert into acl_sid (id, principal, sid) values // уникально по sid+principal
-    (1, true, "sid_name");
+    (1, true, "sid_name admin1(???)");
 
 insert into acl_class (id, class) values //уникально по class
     (1, "class_name example Faction");

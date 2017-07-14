@@ -32,7 +32,6 @@ public class AuthenticationManagerDolphin implements AuthenticationManager {
 
     @Autowired
     UserDetailsServiceDolphin userDetailsService;
-    //private final UserDetailsServiceDolphin userDetailsService;
 
     public AuthenticationManagerDolphin(UserDetailsServiceDolphin userDetailsService) {
         this.userDetailsService = userDetailsService;
@@ -40,13 +39,7 @@ public class AuthenticationManagerDolphin implements AuthenticationManager {
 
     //static final List<GrantedAuthority> AUTHORITIES = new ArrayList<GrantedAuthority>();
 
-    /*static {
-        AUTHORITIES.add(new SimpleGrantedAuthority("ROLE_USER"));
-    }*/
-
     public Authentication authenticate(Authentication auth) throws AuthenticationException {
-        //if (auth.getName().equals(auth.getCredentials()))
-        //if (auth.getName() != null)
         UserDetails userToAuth = userDetailsService.loadUserByUsername(auth.getName());
         if (userToAuth == null) throw new BadCredentialsException("Bad Credentials");
         if (userToAuth.getPassword().equals(auth.getCredentials()))
@@ -60,24 +53,6 @@ public class AuthenticationManagerDolphin implements AuthenticationManager {
         }
         throw new BadCredentialsException("Bad Credentials");
     }
-
-
-    /*
-    @Override
-    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        //AuthenticationDolphin authenticationDolphin = (AuthenticationDolphin) authentication;
-
-        String name = (String) authentication.getPrincipal();
-        UserDetails userDetails = userDetailsService.loadUserByUsername(name);
-        if (userDetails == null) {
-            throw new UsernameNotFoundException("Unknown name");
-        }
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        authentication.setAuthenticated(true);
-        //authentication.setDetails(userDetails);
-
-        return authentication;
-    }*/
 
     /*@Override
     public boolean supports(Class authentication) {
