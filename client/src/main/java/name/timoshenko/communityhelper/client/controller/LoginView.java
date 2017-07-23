@@ -7,6 +7,7 @@ import com.canoo.platform.client.javafx.FXBinder;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -40,6 +41,9 @@ public class LoginView extends StagedFXMLViewBinder<LoginWindowModel> {
     @FXML
     private TextField passwordText;
 
+    @FXML
+    private Label message;
+
     public LoginView(ClientContext clientContext, String controllerName, URL fxmlLocation, Stage stage) {
         super(clientContext, controllerName, fxmlLocation, stage);
     }
@@ -61,6 +65,7 @@ public class LoginView extends StagedFXMLViewBinder<LoginWindowModel> {
 
         FXBinder.bind(loginText.textProperty()).bidirectionalTo(getModel().currentUserModelProperty().get().loginProperty());
         FXBinder.bind(passwordText.textProperty()).bidirectionalTo(getModel().currentUserModelProperty().get().passwordProperty());
+        FXBinder.bind(message.textProperty()).bidirectionalTo(getModel().messageProperty());
 
         getParent().getScene().getWindow().setOnCloseRequest(e -> System.exit(0));
         quitButton.setOnAction(e -> System.exit(0));

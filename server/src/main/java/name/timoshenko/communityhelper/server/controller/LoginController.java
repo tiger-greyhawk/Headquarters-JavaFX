@@ -63,6 +63,9 @@ public class LoginController {
             loginWindowModel.currentUserModelProperty().get().userIdProperty().set(user.getId());
             loginWindowModel.currentUserModelProperty().get().loginProperty().set(user.getLogin());
             loginWindowModel.currentUserModelProperty().get().passwordProperty().set(null);
+            loginWindowModel.messageProperty().set(null);
+        } else {
+            loginWindowModel.messageProperty().set("Login failed.");
         }
     }
 
