@@ -1,11 +1,14 @@
 package name.timoshenko.communityhelper.server.model.domain;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.net.URI;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -13,6 +16,7 @@ import java.util.Set;
  *
  */
 @Entity
+@Transactional
 @Table(name = "users")
 public class User implements UserDetails {
 
@@ -24,14 +28,14 @@ public class User implements UserDetails {
     @Column(name = "password", nullable = false)
     private final String passwordHash;
 
-    @OneToMany(targetEntity = Player.class)
-    @JoinTable(name = "user_players", joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "player_id"))
-    private Set<Player> players;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = CascadeType.ALL)
+    //@JoinColumn(name = "user")
+    private List<Player> players;
 
-    @ManyToMany(targetEntity=UserRole.class)
+    @ManyToMany(fetch = FetchType.EAGER, targetEntity=UserRole.class)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
+    //private Collection<? extends GrantedAuthority> roles;
     private Set<UserRole> roles;
 
     public User() {
@@ -56,10 +60,31 @@ public class User implements UserDetails {
         return passwordHash;
     }
 
-    @Override
-    public Set<UserRole> getAuthorities() {
-        return roles;
+    public List<Player> getPlayers(){
+        return players;
     }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        final Set<GrantedAuthority> _grntdAuths = new HashSet<GrantedAuthority>();
+
+        //List<UserRole> _roles = null;
+
+        //if (user!=null) {
+        //    _roles = user.getRoles();
+        //}
+
+        //if (roles!=null) {
+            for (UserRole userRole : roles) {
+                _grntdAuths.add(new SimpleGrantedAuthority(userRole.getName()));
+            }
+        //}
+
+        return _grntdAuths;
+    }
+    /*public Set<UserRole> getAuthorities() {
+        return roles;
+    }*/
 
     @Override
     public String getPassword() {

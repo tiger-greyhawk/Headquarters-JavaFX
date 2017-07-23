@@ -18,4 +18,5 @@ public interface FactionService {
      * @return a {@link Collection} of {@link Faction}s that match specified pattern
      */
     List<Faction> getFactions(String pattern);
+    //Faction getFactionById(int factionId);
 }

@@ -2,10 +2,18 @@ package name.timoshenko.communityhelper.server;
 
 import com.canoo.platform.server.spring.DolphinPlatformApplication;
 import javafx.application.Application;
+import name.timoshenko.communityhelper.server.controller.Security.ACL.CustomApplicationInitializer;
+import name.timoshenko.communityhelper.server.controller.Security.SecurityConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  * Основной класс, запускающий spring-framework, который, в свою очередь, запускает
@@ -16,10 +24,19 @@ import org.springframework.context.annotation.ComponentScan;
 @DolphinPlatformApplication
 public class SpringServer extends SpringBootServletInitializer {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         SpringApplication.run(new Class[]{SpringServer.class}, args);
         //ConfigurableApplicationContext applicationContext = SpringApplication.run(SpringServer.class, args);
+//        ConfigurableApplicationContext applicationContext = SpringApplication.run(SecurityConfig.class, args);
         //applicationContext.registerShutdownHook();
+
     }
 
+
+
+
+    /*@Override
+    protected Class<?>[] getRootConfigClasses() {
+        return new Class[] { CustomApplicationInitializer.class };
+    }*/
 }

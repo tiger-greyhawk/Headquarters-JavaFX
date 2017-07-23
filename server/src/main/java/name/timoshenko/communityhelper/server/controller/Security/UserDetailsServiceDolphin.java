@@ -1,6 +1,7 @@
 package name.timoshenko.communityhelper.server.controller.Security;
 
 import name.timoshenko.communityhelper.server.model.domain.User;
+import name.timoshenko.communityhelper.server.model.domain.UserDetailsImplementaionWithRoles;
 import name.timoshenko.communityhelper.server.model.domain.UserRole;
 import name.timoshenko.communityhelper.server.model.repositories.UserRepository;
 import name.timoshenko.communityhelper.server.model.repositories.UserRepository;
@@ -40,16 +41,8 @@ public class UserDetailsServiceDolphin implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String login)
             throws UsernameNotFoundException {
-        User user = userRepository.findOneByLogin(login)
+        return userRepository.findOneByLogin(login)
                 .orElseThrow(() -> new UsernameNotFoundException("No User With Login \"" + login + "\" Was Found"));
-
-        Collection<GrantedAuthority>  grantedAuthorities = new HashSet<>();
-        for (UserRole userRole : user.getAuthorities()) {
-            grantedAuthorities.add(new SimpleGrantedAuthority(userRole.getName()));
-        }
-        return new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPasswordHash(), grantedAuthorities);
     }
-
-
 }
 

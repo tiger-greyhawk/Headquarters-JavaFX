@@ -4,6 +4,7 @@ import name.timoshenko.communityhelper.server.model.domain.FactionPlayer;
 import name.timoshenko.communityhelper.server.model.repositories.FactionPlayerRepository;
 import name.timoshenko.communityhelper.server.model.service.FactionPlayerService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;

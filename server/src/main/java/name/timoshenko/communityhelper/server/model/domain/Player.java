@@ -1,13 +1,14 @@
 package name.timoshenko.communityhelper.server.model.domain;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  *
  */
 @Entity
 @Table(name = "players")
-public class Player {
+public class Player implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,6 +17,9 @@ public class Player {
     private final Long userId;
     @Column(name = "nick", nullable = false)
     private final String nick;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "players")
+    private User user;
 
     public Player() {
         this(null, null, null);

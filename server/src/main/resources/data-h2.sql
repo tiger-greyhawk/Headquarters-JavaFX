@@ -46,6 +46,104 @@ insert into user_roles (user_id, role_id) values
     (4, 1),
     (5, 2),
     (6, 2);
+
+
+CREATE TABLE IF NOT EXISTS acl_sid (
+    id bigint(20) NOT NULL AUTO_INCREMENT,
+    principal tinyint(1) NOT NULL,
+    sid varchar(100) NOT NULL,
+    PRIMARY KEY (id),
+    UNIQUE KEY unique_uk_1 (sid, principal))
+    ENGINE=InnoDB  DEFAULT CHARSET=UTF8;
+
+CREATE TABLE IF NOT EXISTS `acl_class` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `class` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_uk_2` (`class`)
+) ENGINE=InnoDB  DEFAULT CHARSET=UTF8;
+
+CREATE TABLE IF NOT EXISTS `acl_entry` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `acl_object_identity` bigint(20) NOT NULL,
+  `ace_order` int(11) NOT NULL,
+  `sid` bigint(20) NOT NULL,
+  `mask` int(11) NOT NULL,
+  `granting` tinyint(1) NOT NULL,
+  `audit_success` tinyint(1) NOT NULL,
+  `audit_failure` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_uk_4` (`acl_object_identity`,`ace_order`),
+  --KEY `foreign_fk_5` (`sid`)
+) ENGINE=InnoDB  DEFAULT CHARSET=UTF8;
+
+CREATE TABLE IF NOT EXISTS `acl_object_identity` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `object_id_class` bigint(20) NOT NULL,
+  `object_id_identity` bigint(20) NOT NULL,
+  `parent_object` bigint(20) DEFAULT NULL,
+  `owner_sid` bigint(20) DEFAULT NULL,
+  `entries_inheriting` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `unique_uk_3` (`object_id_class`,`object_id_identity`),
+  --KEY `foreign_fk_1` (`parent_object`),
+  --KEY `foreign_fk_3` (`owner_sid`)
+) ENGINE=InnoDB  DEFAULT CHARSET=UTF8;
+
+
+
+insert into acl_sid (id, principal, sid) values
+(1, 1, 'user1'),
+(2, 1, 'user2'),
+(3, 1, 'user3');
+
+INSERT INTO acl_class (id, class) VALUES
+(1, 'name.timoshenko.communityhelper.server.model.domain.Faction'),
+(2, 'name.timoshenko.communityhelper.server.model.domain.Player');
+
+INSERT INTO acl_object_identity (id, object_id_class, object_id_identity, parent_object, owner_sid, entries_inheriting) VALUES
+(1, 1, 1, NULL, 1, 0),
+(2, 1, 2, NULL, 2, 0),
+(3, 1, 3, NULL, 3, 0),
+(4, 1, 4, NULL, 4, 0),
+(5, 2, 1, NULL, 1, 0),
+(6, 2, 2, NULL, 1, 0),
+(7, 2, 3, NULL, 1, 0),
+(8, 2, 4, NULL, 1, 0),
+(9, 2, 5, NULL, 1, 0);
+
+INSERT INTO acl_entry (id, acl_object_identity, ace_order, sid, mask, granting, audit_success, audit_failure) VALUES
+(1, 1, 1, 1, 4, 1, 1, 1),
+(2, 2, 1, 1, 1, 1, 1, 1),
+(3, 3, 1, 1, 1, 1, 1, 1),
+(4, 1, 2, 1, 2, 1, 1, 1),
+(5, 2, 2, 1, 2, 1, 1, 1),
+(6, 3, 2, 1, 2, 1, 1, 1),
+(7, 4, 1, 1, 1, 1, 1, 1),
+(8, 5, 1, 1, 1, 1, 1, 1),
+(9, 6, 1, 1, 1, 1, 1, 1),
+(10, 7, 1, 2, 1, 1, 1, 1),
+(11, 8, 1, 1, 1, 1, 1, 1),
+(12, 9, 1, 2, 1, 1, 1, 1),
+(13, 7, 2, 1, 1, 1, 1, 1),
+(14, 8, 2, 1, 1, 1, 1, 1),
+(15, 9, 2, 1, 1, 1, 1, 1),
+(28, 4, 3, 2, 1, 1, 1, 1),
+(29, 5, 3, 2, 1, 1, 1, 1),
+(30, 6, 3, 2, 1, 1, 1, 1),
+(31, 4, 4, 2, 2, 1, 1, 1),
+(32, 5, 4, 2, 2, 1, 1, 1),
+(33, 6, 4, 2, 2, 1, 1, 1),
+(34, 7, 3, 2, 1, 1, 1, 1),
+(35, 8, 3, 2, 1, 1, 1, 1),
+(36, 9, 3, 2, 1, 1, 1, 1),
+(37, 7, 4, 2, 2, 1, 1, 1),
+(38, 8, 4, 2, 2, 1, 1, 1),
+(39, 9, 4, 2, 2, 1, 1, 1),
+(40, 7, 5, 3, 1, 1, 1, 1),
+(41, 8, 5, 3, 1, 1, 1, 1),
+(42, 9, 5, 3, 1, 1, 1, 1);
+
 /*
 //Tables of acl from http://docs.spring.io/spring-security/site/docs/4.2.3.RELEASE/reference/htmlsingle/#dbschema-acl
 

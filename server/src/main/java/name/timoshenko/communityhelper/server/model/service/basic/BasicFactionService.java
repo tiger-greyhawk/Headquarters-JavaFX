@@ -3,6 +3,7 @@ package name.timoshenko.communityhelper.server.model.service.basic;
 import name.timoshenko.communityhelper.server.model.domain.Faction;
 import name.timoshenko.communityhelper.server.model.repositories.FactionRepository;
 import name.timoshenko.communityhelper.server.model.service.FactionService;
+import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class BasicFactionService implements FactionService {
     }
 
     @Override
+    //@PostFilter("hasPermission(returnObject, 'ACL_DELETE')")
     public List<Faction> getFactions(String pattern) {
         if (pattern.trim().isEmpty()) {
             return factionRepository.findAll();

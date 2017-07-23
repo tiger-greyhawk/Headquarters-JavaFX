@@ -5,6 +5,7 @@ import name.timoshenko.communityhelper.server.model.repositories.PlayerRepositor
 import name.timoshenko.communityhelper.server.model.service.PlayerService;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.method.P;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.access.prepost.PreFilter;
@@ -52,11 +53,15 @@ public class BasicPlayerService implements PlayerService {
 
     @Override
     //@PostFilter("hasRole('ROLE_ADMIN')")
-    //@Secured({"ROLE_USER", "ACL_REPORT_ACCEPT"})
-    @Secured({"ACL_REPORT_ACCEPT"})
+    @Secured({"ROLE_USER", "ACL_DELETE"})
+    //@Secured({"ACL_REPORT_ACCEPT"})
+    //@PostAuthorize("returnObject.size() < 4")
+    //@PostFilter("filterObject.getUserId() == principal.getId()")
+    //@PreAuthorize("hasPermission('ACL_DELETE')")
+    @PostFilter("hasPermission(filterObject, 'READ')")
+    //@PostFilter("hasPermission(filterObject, 'ACL_DELETE')")
     public List<Player> getPlayers(List<Long> ids) {
-        return playerRepository.findAll(ids);
+        List<Player> players = playerRepository.findAll(ids);
+        return players;
     }
-
-
 }

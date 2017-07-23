@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.acls.model.AclService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -51,6 +52,8 @@ public class FactionListController {
     //private final UserDetailsService userService;
     private final BeanManager beanManager;
     private final PropertyBinder propertyBinder;
+
+
 
     @DolphinModel
     private FactionListWindowModel model;
@@ -89,7 +92,9 @@ public class FactionListController {
     }
 
     private Collection<PlayerModel> getPlayers(final Long factionId) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         final List<Long> factionPlayersIds = factionPlayerService.findPlayersByFactionId(factionId).stream().collect(Collectors.toList());
+
         List<Player> factionPlayers = new ArrayList<Player>();
         try {
             factionPlayers = playerService.getPlayers(factionPlayersIds);

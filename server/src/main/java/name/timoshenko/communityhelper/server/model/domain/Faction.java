@@ -1,13 +1,14 @@
 package name.timoshenko.communityhelper.server.model.domain;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  *
  */
 @Entity
 @Table(name = "factions")
-public class Faction {
+public class Faction implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
