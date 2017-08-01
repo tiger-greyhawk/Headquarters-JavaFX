@@ -4,7 +4,6 @@ import com.canoo.platform.client.ClientContext;
 import com.canoo.platform.client.ControllerActionException;
 import com.canoo.platform.client.javafx.FXBinder;
 import com.canoo.platform.client.javafx.binding.FXWrapper;
-import com.canoo.platform.client.javafx.view.AbstractFXMLViewBinder;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
@@ -85,6 +84,7 @@ public class FactionListView extends StagedFXMLViewBinder<FactionListWindowModel
         getModel().currentUserModelProperty().onChanged(v -> FXBinder.bind(loginProperty.textProperty())
                 .bidirectionalTo(getModel().currentUserModelProperty().get().loginProperty()));
 
+        deleteFactionButton.setOnAction(e -> invoke(Constants.DELETE_FACTION_EVENT));
         deleteFactionButton.setDisable(true);
         FXBinder.bind(deleteFactionButton.disableProperty())
                 .to(getModel().cannotDeleteCurrentFactionProperty());

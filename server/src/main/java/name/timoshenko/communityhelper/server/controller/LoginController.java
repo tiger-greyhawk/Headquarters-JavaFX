@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 
 import javax.annotation.PostConstruct;
-import java.util.Optional;
 
 /**
  *
@@ -42,6 +41,8 @@ public class LoginController {
         this.propertyBinder = propertyBinder;
         this.userService = userService;
     }
+
+
 
     @PostConstruct
     public void init() {

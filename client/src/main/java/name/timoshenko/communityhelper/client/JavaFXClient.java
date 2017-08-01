@@ -1,28 +1,27 @@
 package name.timoshenko.communityhelper.client;
 
-import com.canoo.platform.client.*;
+import com.canoo.platform.client.ClientContext;
+import com.canoo.platform.client.ClientInitializationException;
+import com.canoo.platform.client.ClientShutdownException;
 import com.canoo.platform.client.javafx.DolphinPlatformApplication;
-//import com.canoo.platform.client.javafx.JavaFXConfiguration;
-import com.canoo.platform.client.javafx.JavaFXConfiguration;
 import com.canoo.platform.core.DolphinRuntimeException;
 import com.google.common.base.CaseFormat;
 import javafx.scene.Scene;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import name.timoshenko.communityhelper.client.controller.FactionListView;
-import name.timoshenko.communityhelper.client.controller.MainView;
 import name.timoshenko.communityhelper.client.controller.LoginView;
+import name.timoshenko.communityhelper.client.controller.MainView;
 import name.timoshenko.communityhelper.client.controller.StagedFXMLViewBinder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sun.net.www.protocol.http.HttpURLConnection;
 
-
-//import java.net.HttpURLConnection;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
+
+//import com.canoo.platform.client.javafx.JavaFXConfiguration;
+//import java.net.HttpURLConnection;
 
 /**
  *
@@ -71,6 +70,8 @@ public class JavaFXClient extends DolphinPlatformApplication {
         createFxmlView(clientContext, MainView.class, mainStage);
         createFxmlView(clientContext, FactionListView.class, new Stage());
         createFxmlView(clientContext, LoginView.class, new Stage());
+        //createFxmlView(clientContext, TimeAttackListView.class, new Stage());
+// Нельзя создавать сразу все окна все-таки... Даже hide().
     }
 
     @Override

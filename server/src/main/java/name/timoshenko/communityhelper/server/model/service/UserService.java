@@ -9,4 +9,5 @@ import java.util.Optional;
  */
 public interface UserService {
     Optional<User> findUserByLogin(String login);
+    Optional<User> findUserById(Long id);
 }

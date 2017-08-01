@@ -4,13 +4,17 @@ import name.timoshenko.communityhelper.server.model.domain.Faction;
 import name.timoshenko.communityhelper.server.model.repositories.FactionRepository;
 import name.timoshenko.communityhelper.server.model.service.FactionService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  *
  */
 @Service("basicFactionService")
+@Transactional(propagation = Propagation.REQUIRED)
 public class BasicFactionService implements FactionService {
 
     private final FactionRepository factionRepository;
@@ -25,5 +29,25 @@ public class BasicFactionService implements FactionService {
             return factionRepository.findAll();
         }
         return factionRepository.findByNameLike("%" + pattern + "%");
+    }
+
+    @Override
+    public Optional<Faction> getFactionById(Long factionId){
+        return Optional.ofNullable(factionRepository.findOne(factionId));
+    }
+
+    @Override
+    public Faction createFaction(Faction faction) {
+        if (faction == null) return null;
+        return  factionRepository.save(faction);
+    }
+
+    //@PreAuthorize("hasPermission(#faction, 'delete')")
+    @Override
+    public void deleteFaction(Long factionId) {
+        //if (faction == null) return;
+        factionRepository.delete(factionId);
+        //ObjectIdentity oid = new ObjectIdentityImpl(Faction.class, factionId);
+        //mutableAclService.deleteAcl(oid, false);
     }
 }

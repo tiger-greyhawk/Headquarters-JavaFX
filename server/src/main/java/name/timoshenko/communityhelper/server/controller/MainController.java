@@ -1,14 +1,11 @@
 package name.timoshenko.communityhelper.server.controller;
 
 import com.canoo.dolphin.BeanManager;
-import com.canoo.platform.server.DolphinAction;
 import com.canoo.platform.server.DolphinController;
 import com.canoo.platform.server.DolphinModel;
 import com.canoo.platform.server.binding.PropertyBinder;
 import com.canoo.platform.server.event.DolphinEventBus;
 import name.timoshenko.communityhelper.common.Constants;
-import name.timoshenko.communityhelper.common.model.CurrentUserModel;
-import name.timoshenko.communityhelper.common.model.FactionListWindowModel;
 import name.timoshenko.communityhelper.common.model.MainWindowModel;
 import org.springframework.beans.factory.annotation.Autowired;
 

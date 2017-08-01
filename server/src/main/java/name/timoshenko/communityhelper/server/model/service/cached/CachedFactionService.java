@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  *
@@ -18,8 +19,12 @@ public class CachedFactionService implements FactionService {
     private final FactionService source;
     private final Map<String, List<Faction>> factionsCache = new HashMap<>();
 
-    public CachedFactionService(@Qualifier("basicFactionService") FactionService source) {
+    //@Autowired
+    //private final MutableAclService mutableAclService;
+
+    public CachedFactionService(@Qualifier("basicFactionService") FactionService source) {//, MutableAclService mutableAclService) {
         this.source = source;
+        //this.mutableAclService = mutableAclService;
     }
 
     @Override
@@ -30,5 +35,23 @@ public class CachedFactionService implements FactionService {
         final List<Faction> factions = source.getFactions(pattern);
         factionsCache.put(pattern, factions);
         return factions;
+    }
+
+    @Override
+    public Optional<Faction> getFactionById(Long factionId){
+        return null;
+    }
+
+    @Override
+    public Faction createFaction(Faction faction) {
+        return source.createFaction(faction);
+    }
+
+    @Override
+    public void deleteFaction(Long factionId) {
+        source.deleteFaction(factionId);
+        //factionRepository.deleteById(factionId);
+        //ObjectIdentity oid = new ObjectIdentityImpl(Faction.class, factionId);
+        //mutableAclService.deleteAcl(oid, false);
     }
 }

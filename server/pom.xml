@@ -11,6 +11,19 @@
 
     <artifactId>server</artifactId>
 
+<!--
+    <repositories>
+        <repository>
+            <id>strategy-spring-security-acl-github-repo</id>
+            <url>https://raw.github.com/lordlothar99/mvn-repo/master/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+-->
+    <!--<packaging>war</packaging>-->
+
     <dependencies>
         <dependency>
             <groupId>name.timoshenko.communityhelper</groupId>
@@ -38,6 +51,56 @@
             <version>1.5.4.RELEASE</version>
         </dependency>
         <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>4.2.3.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-acl</artifactId>
+            <version>4.2.3.RELEASE</version>
+        </dependency>
+
+        <!-- plugin for use jpa in Security ACL -->
+<!--        <dependency>
+            <groupId>com.github.lothar.security.acl</groupId>
+            <artifactId>strategy-spring-security-acl-elasticsearch</artifactId>
+            <version>1.5.1</version>
+        </dependency>
+-->
+<!--        <dependency>
+            <groupId>com.github.lothar.security.acl</groupId>
+            <artifactId>strategy-spring-security-acl-grant</artifactId>
+            <version>1.5.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.lothar.security.acl</groupId>
+            <artifactId>strategy-spring-security-acl-jpa</artifactId>
+            <version>1.5.1</version>
+        </dependency>
+-->
+        <!-- end  plugin for use jpa in Security ACL -->
+
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>2.10.4</version>
+        </dependency>
+        <!-- Spring caching framework inside this -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>4.2.3.RELEASE</version>
+        </dependency>
+
+        <!-- Support for Ehcache and others -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>4.2.3.RELEASE</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
             <version>1.5.4.RELEASE</version>
@@ -58,6 +121,7 @@
         </dependency>
     </dependencies>
 
+<!--
     <build>
         <plugins>
             <plugin>
@@ -67,6 +131,7 @@
             </plugin>
         </plugins>
     </build>
+-->
 
 
 </project>

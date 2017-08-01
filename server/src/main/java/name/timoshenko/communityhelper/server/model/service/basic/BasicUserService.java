@@ -21,6 +21,12 @@ public class BasicUserService implements UserService {
 
     @Override
     public Optional<User> findUserByLogin(String login) {
-        return userRepository.findOneByLogin(login);
+        return userRepository.findByLogin(login);
+    }
+
+    @Override
+    public Optional<User> findUserById(Long id) {
+        //return userRepository.findOne(id);
+        return userRepository.findOneById(id);
     }
 }

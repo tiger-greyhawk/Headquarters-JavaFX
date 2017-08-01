@@ -16,6 +16,9 @@ public class Player {
     private final Long userId;
     @Column(name = "nick", nullable = false)
     private final String nick;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "players")
+    private User user;
 
     public Player() {
         this(null, null, null);
