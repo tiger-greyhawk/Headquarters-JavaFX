@@ -1,5 +1,6 @@
 package name.timoshenko.communityhelper.server.model.service.aggregate;
 
+//import javassist.NotFoundException;
 import name.timoshenko.communityhelper.server.model.domain.Player;
 import name.timoshenko.communityhelper.server.model.domain.User;
 import name.timoshenko.communityhelper.server.model.service.PlayerService;
@@ -13,7 +14,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
+
+
 
 /**
  *
@@ -34,8 +36,11 @@ public class AggregateUserServiceImpl implements AggregateUserService {
     @Override
     public Player getActivePlayerByUserLogin(String userLogin) {
         User user = userService.findUserByLogin(userLogin).orElseThrow(() -> new NotFoundException("User not found"));
-        return playerService.findPlayer(userActivePlayerStateService.getActivePlayer(user.getId()).getActivePlayerId())
+        Player activePlayer = playerService.findPlayer(userActivePlayerStateService.getActivePlayer(user.getId()).getActivePlayerId())
                 .orElseThrow(() -> new NotFoundException("Player not found ny user."));
+        if (!userPlayerService.findByPlayerId(activePlayer.getId()).orElseThrow(() -> new NotFoundException("в user-player нет игрока с таким id"))
+                .getUserId().equals(user.getId())) throw new NotFoundException("Игрок не принадлежит текущему пользователю!!!");
+        return activePlayer;
     }
 
     @Override
@@ -45,7 +50,8 @@ public class AggregateUserServiceImpl implements AggregateUserService {
     }
 
     @Override
-    public Optional<User> getUserByPlayerId(Long playerId) {
-        return userService.findUserById(userPlayerService.findByPlayerId(playerId).orElseThrow(() -> new NotFoundException("")).getUserId());
+    public User getUserByPlayerId(Long playerId) {
+        return userService.findUserById(userPlayerService.findByPlayerId(playerId).orElseThrow(() -> new NotFoundException("сопоставление user-player не найдено")).getUserId())
+                .orElseThrow(() -> new NotFoundException("пользователь этого игрока не найден"));
     }
 }

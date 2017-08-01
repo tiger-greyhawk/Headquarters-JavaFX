@@ -6,16 +6,27 @@ insert into users (id, login, password) values
     (5, 'admin1', '123'),
     (6, 'admin2', '123');
 
-insert into players (id, user_id, nick) values
-    (1, 1, 'Player1'),
-    (2, 1, 'Player2'),
-    (3, 2, 'Player3'),
-    (4, 2, 'Player4'),
-    (5, 3, 'Player5'),
-    (6, 3, 'Player6'),
-    (7, 4, 'Player7'),
-    (8, 4, 'Player8'),
-    (9, 10, 'PlayerNullUser');
+insert into players (id, nick) values
+    (1, 'Player1'),
+    (2, 'Player2'),
+    (3, 'Player3'),
+    (4, 'Player4'),
+    (5, 'Player5'),
+    (6, 'Player6'),
+    (7, 'Player7'),
+    (8, 'Player8'),
+    (9, 'PlayerNullUser');
+
+insert into user_player (id, user_id, player_id) values
+    (1,1,1),
+    (2,1,2),
+    (3,2,3),
+    (4,2,4),
+    (5,3,5),
+    (6,4,6),
+    (7,5,7),
+    (8,6,8),
+    (9,6,9);
 
 insert into user_active_player (id, user_id, active_player_id) values
     (1, 1, 1),

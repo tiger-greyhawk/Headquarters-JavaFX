@@ -109,7 +109,8 @@ public class FactionListController {
                     final PlayerModel playerModel = beanManager.create(PlayerModel.class);
                     playerModel.idProperty().set(player.getId());
                     playerModel.nicknameProperty().set(player.getNick());
-                    playerModel.userIdProperty().set(player.getUserId());
+                    //playerModel.userIdProperty().set(player.getUserId());
+                    playerModel.userIdProperty().set(aggregateUserService.getUserByPlayerId(player.getId()).getId());
                     return playerModel;
                 }).collect(Collectors.toList());
     }

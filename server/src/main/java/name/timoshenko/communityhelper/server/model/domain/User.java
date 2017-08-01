@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -26,10 +25,6 @@ public class User implements UserDetails {
     private final String login;
     @Column(name = "password", nullable = false)
     private final String passwordHash;
-
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = CascadeType.ALL)
-    //@JoinColumn(name = "user")
-    private List<Player> players;
 
     @ManyToMany(fetch = FetchType.EAGER, targetEntity=UserRole.class)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
@@ -57,10 +52,6 @@ public class User implements UserDetails {
 
     public String getPasswordHash() {
         return passwordHash;
-    }
-
-    public List<Player> getPlayers(){
-        return players;
     }
 
     @Override
