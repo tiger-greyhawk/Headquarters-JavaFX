@@ -22,9 +22,6 @@ import java.util.Set;
 @Transactional(propagation = Propagation.REQUIRED)
 public class UserDetailsServiceDolphin implements UserDetailsService {
 
-    /*private static final Logger log = Logger
-            .getLogger(UserDetailsServiceDolphin.class);*/
-
     @Autowired
     private final UserRepository userRepository;
 
@@ -40,12 +37,13 @@ public class UserDetailsServiceDolphin implements UserDetailsService {
 
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
 
+        /*TODO Права
+        Добавить права пользователя, а не статик ROLE_USER
+         */
         //for (UserRole userRole : user.getRoles()) {
         grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
         //}
         return new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPasswordHash(), grantedAuthorities);
-        //return user;
-
     }
 }
 

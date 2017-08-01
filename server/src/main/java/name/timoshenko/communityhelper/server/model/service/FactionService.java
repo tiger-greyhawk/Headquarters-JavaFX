@@ -23,7 +23,6 @@ public interface FactionService {
 
     Faction createFaction(Faction faction);
 
-    //@PreAuthorize("hasPermission(#faction, 'READ')")
     @PreAuthorize("hasRole('ROLE_USER')")
     void deleteFaction(Long factionId);
     Optional<Faction> getFactionById(Long factionId);

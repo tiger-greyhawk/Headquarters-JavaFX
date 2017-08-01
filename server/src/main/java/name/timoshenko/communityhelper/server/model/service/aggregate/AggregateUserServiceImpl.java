@@ -2,7 +2,6 @@ package name.timoshenko.communityhelper.server.model.service.aggregate;
 
 import name.timoshenko.communityhelper.server.model.domain.Player;
 import name.timoshenko.communityhelper.server.model.domain.User;
-import name.timoshenko.communityhelper.server.model.domain.UserActivePlayer;
 import name.timoshenko.communityhelper.server.model.service.PlayerService;
 import name.timoshenko.communityhelper.server.model.service.UserActivePlayerStateService;
 import name.timoshenko.communityhelper.server.model.service.UserPlayerService;
@@ -42,7 +41,6 @@ public class AggregateUserServiceImpl implements AggregateUserService {
     @Override
     public List<Player> getPlayersByUserLogin(String userLogin) {
         User user = userService.findUserByLogin(userLogin).orElseThrow(() -> new NotFoundException("User not found"));
-        //List<Player> players = playerService.getPlayers(userPlayerService.findIdPlayersByUserId(user.getId()));
         return playerService.getPlayers(userPlayerService.findIdsByUserId(user.getId()));
     }
 

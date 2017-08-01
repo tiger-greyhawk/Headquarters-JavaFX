@@ -19,9 +19,6 @@ public class CachedFactionService implements FactionService {
     private final FactionService source;
     private final Map<String, List<Faction>> factionsCache = new HashMap<>();
 
-    //@Autowired
-    //private final MutableAclService mutableAclService;
-
     public CachedFactionService(@Qualifier("basicFactionService") FactionService source) {//, MutableAclService mutableAclService) {
         this.source = source;
         //this.mutableAclService = mutableAclService;
@@ -47,11 +44,11 @@ public class CachedFactionService implements FactionService {
         return source.createFaction(faction);
     }
 
+    /*TODO удаление фраки
+    Надо чистить и другие сущности после/перед удалением фракции
+     */
     @Override
     public void deleteFaction(Long factionId) {
         source.deleteFaction(factionId);
-        //factionRepository.deleteById(factionId);
-        //ObjectIdentity oid = new ObjectIdentityImpl(Faction.class, factionId);
-        //mutableAclService.deleteAcl(oid, false);
     }
 }

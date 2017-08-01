@@ -14,12 +14,13 @@ import java.util.Optional;
 @Component
 @Transactional(propagation = Propagation.REQUIRED)
 public interface UserPlayerService {
-    /***
+    /*TODO object or id
      * Надо подумать, надо ли мне возвращать объект (пару id), или возвращать только один парный id вида Long
-     * @param userId
-     * @return
      */
 
+    /*TODO именование методов
+    еще раз обратить внимание на что принимают/ что возвращают
+     */
     //Optional<UserPlayer> findPlayerByUserId(Long userId);
     List<UserPlayer> findByUserId(Long userId);
     List<Long> findIdsByUserId(Long userId);

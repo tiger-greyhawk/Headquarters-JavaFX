@@ -21,6 +21,9 @@ public class BasicPlayerService implements PlayerService {
     }
 
 
+    /*TODO комментарии
+    Разобраться с этим комментом и подумать куда его перенести, если эта инфа вообще нужна...
+     */
     /***
      * Доступны аннотации вида @Secured, @(Pre)(Post)Authorize, @(Pre)(Post)Filter  (как для всего сервиса, так и для отдельных методов)
      * Secured - только проверка обладания правами (не обязательно ролями)
@@ -34,6 +37,8 @@ public class BasicPlayerService implements PlayerService {
      * @PostFilter("hasRole('ROLE_USER') or filterObject.assignee == authentication.name") - с фильтром. Не разобрался. Применяется только для коллекций.
      * @PreFilter("hasRole('ROLE_USER')") -
      * @PostFilter("hasPermission(filterObject, 'read') or hasPermission(filterObject, 'admin')")
+     * @PostAuthorize("returnObject.size() < 4") - вернет все, если возвращенных объектов меньше четырех.
+     * @PostFilter("filterObject.getUserId() == principal.getId()") - отфильтрует среди возвращаемых объектов только те, которые "принадлежат" авторизованному пользователю.
      *
      * Более подробно в документации здесь: https://docs.spring.io/spring-security/site/docs/current/reference/html/el-access.html
      */
@@ -45,14 +50,6 @@ public class BasicPlayerService implements PlayerService {
     }
 
     @Override
-    //@PostFilter("hasRole('ROLE_ADMIN')")
-    //@Secured({"ROLE_USER", "ACL_DELETE"})
-    //@Secured({"ACL_REPORT_ACCEPT"})
-    //@PostAuthorize("returnObject.size() < 4")
-    //@PostFilter("filterObject.getUserId() == principal.getId()")
-    //@PreAuthorize("hasPermission('ACL_DELETE')")
-    //@PostFilter("hasPermission(filterObject, 'READ')")
-    //@PostFilter("hasPermission(filterObject, 'ACL_DELETE')")
     public List<Player> getPlayers(List<Long> ids) {
         List<Player> players = playerRepository.findAll(ids);
         return players;

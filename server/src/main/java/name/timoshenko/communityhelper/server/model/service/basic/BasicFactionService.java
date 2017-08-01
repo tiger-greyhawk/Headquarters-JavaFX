@@ -42,12 +42,8 @@ public class BasicFactionService implements FactionService {
         return  factionRepository.save(faction);
     }
 
-    //@PreAuthorize("hasPermission(#faction, 'delete')")
     @Override
     public void deleteFaction(Long factionId) {
-        //if (faction == null) return;
         factionRepository.delete(factionId);
-        //ObjectIdentity oid = new ObjectIdentityImpl(Faction.class, factionId);
-        //mutableAclService.deleteAcl(oid, false);
     }
 }

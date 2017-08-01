@@ -92,13 +92,15 @@ public class FactionListController {
     }
 
     private Collection<PlayerModel> getPlayers(final Long factionId) {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         final List<Long> factionPlayersIds = factionPlayerService.findPlayersByFactionId(factionId).stream().collect(Collectors.toList());
 
         List<Player> factionPlayers = new ArrayList<Player>();
         try {
             factionPlayers = playerService.getPlayers(factionPlayersIds);
         }
+        /*TODO AccessDeniedExcecption
+        Разобраться или удалить
+         */
         catch (AccessDeniedException accessException) {
             throw new AccessDeniedException("access denied");
         }
@@ -119,9 +121,6 @@ public class FactionListController {
         CurrentUserModel user = model.currentUserModelProperty().get();
         Player activePlayer = aggregateUserService.getActivePlayerByUserLogin(contextHolderService.getCurrentUser().getLogin());
         return factionOwnerId.equals(activePlayer.getId());
-        //return playerService.findPlayer(factionOwnerId)
-                //.map(Player::getUserId)
-                //.map(id -> id.equals(userId)).orElse(false);
     }
 
     @DolphinAction(Constants.DELETE_FACTION_EVENT)

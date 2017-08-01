@@ -40,7 +40,6 @@ public class SecurityContextHolderServiceImpl implements SecurityContextHolderSe
     @Override
     public User getCurrentUser(){
         UserDetails userDetails = ((UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        //userDetailsService.loadUserByUsername(userDetails.getUsername());
         return userService.findUserByLogin(userDetails.getUsername()).orElseThrow(() -> new NotFoundException("User not found"));
     }
 }
