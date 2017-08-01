@@ -4,7 +4,7 @@ package name.timoshenko.communityhelper.server.model.service.aggregate;
 import name.timoshenko.communityhelper.server.model.domain.Player;
 import name.timoshenko.communityhelper.server.model.domain.User;
 import name.timoshenko.communityhelper.server.model.service.PlayerService;
-import name.timoshenko.communityhelper.server.model.service.UserActivePlayerStateService;
+import name.timoshenko.communityhelper.server.model.service.UserActivePlayerService;
 import name.timoshenko.communityhelper.server.model.service.UserPlayerService;
 import name.timoshenko.communityhelper.server.model.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ import java.util.List;
 public class AggregateUserServiceImpl implements AggregateUserService {
 
     @Autowired
-    private UserActivePlayerStateService userActivePlayerStateService;
+    private UserActivePlayerService userActivePlayerService;
     @Autowired
     private UserPlayerService userPlayerService;
     @Autowired
@@ -35,7 +35,7 @@ public class AggregateUserServiceImpl implements AggregateUserService {
 
     @Override
     public Player getActivePlayerByUserId(Long userId) {
-        Player activePlayer = playerService.findPlayer(userActivePlayerStateService.getActivePlayer(userId).getActivePlayerId())
+        Player activePlayer = playerService.findPlayer(userActivePlayerService.getActivePlayer(userId).getActivePlayerId())
                 .orElseThrow(() -> new NotFoundException("Player not found ny user."));
         if (!userPlayerService.findByPlayerId(activePlayer.getId()).orElseThrow(() -> new NotFoundException("в user-player нет игрока с таким id"))
                 .getUserId().equals(userId)) throw new NotFoundException("Игрок не принадлежит текущему пользователю!!!");

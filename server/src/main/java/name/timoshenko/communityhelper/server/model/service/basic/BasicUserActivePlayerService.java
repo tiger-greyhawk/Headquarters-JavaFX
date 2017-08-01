@@ -1,12 +1,8 @@
 package name.timoshenko.communityhelper.server.model.service.basic;
 
-import name.timoshenko.communityhelper.server.model.domain.Player;
-import name.timoshenko.communityhelper.server.model.domain.User;
 import name.timoshenko.communityhelper.server.model.domain.UserActivePlayer;
 import name.timoshenko.communityhelper.server.model.repositories.UserActivePlayerRepository;
-import name.timoshenko.communityhelper.server.model.service.PlayerService;
-import name.timoshenko.communityhelper.server.model.service.UserActivePlayerStateService;
-import name.timoshenko.communityhelper.server.model.service.UserService;
+import name.timoshenko.communityhelper.server.model.service.UserActivePlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.stereotype.Component;
@@ -18,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Component
 @Transactional(propagation = Propagation.REQUIRED)
-public class UserActivePlayerStateServiceImpl implements UserActivePlayerStateService {
+public class BasicUserActivePlayerService implements UserActivePlayerService {
 
     @Autowired
     UserActivePlayerRepository userActivePlayerRepository;

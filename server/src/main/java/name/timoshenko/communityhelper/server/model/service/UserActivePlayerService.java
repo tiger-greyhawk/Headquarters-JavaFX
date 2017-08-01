@@ -5,7 +5,7 @@ import name.timoshenko.communityhelper.server.model.domain.UserActivePlayer;
 /**
  *
  */
-public interface UserActivePlayerStateService {
+public interface UserActivePlayerService {
     UserActivePlayer getActivePlayer(Long userId);
     UserActivePlayer setActivePlayer(UserActivePlayer userActivePlayer);
 }
