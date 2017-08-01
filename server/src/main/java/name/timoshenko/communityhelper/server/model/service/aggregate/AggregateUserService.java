@@ -9,7 +9,8 @@ import java.util.List;
  *
  */
 public interface AggregateUserService {
-    Player getActivePlayerByUserLogin(String userLogin);
-    List<Player> getPlayersByUserLogin(String userLogin);
+
+    Player getActivePlayerByUserId(Long userId);
+    List<Player> getPlayersByUserId(Long userId);
     User getUserByPlayerId(Long playerId);
 }

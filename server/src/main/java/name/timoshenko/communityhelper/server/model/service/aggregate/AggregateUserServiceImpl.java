@@ -34,20 +34,19 @@ public class AggregateUserServiceImpl implements AggregateUserService {
     private UserService userService;
 
     @Override
-    public Player getActivePlayerByUserLogin(String userLogin) {
-        User user = userService.findUserByLogin(userLogin).orElseThrow(() -> new NotFoundException("User not found"));
-        Player activePlayer = playerService.findPlayer(userActivePlayerStateService.getActivePlayer(user.getId()).getActivePlayerId())
+    public Player getActivePlayerByUserId(Long userId) {
+        Player activePlayer = playerService.findPlayer(userActivePlayerStateService.getActivePlayer(userId).getActivePlayerId())
                 .orElseThrow(() -> new NotFoundException("Player not found ny user."));
         if (!userPlayerService.findByPlayerId(activePlayer.getId()).orElseThrow(() -> new NotFoundException("в user-player нет игрока с таким id"))
-                .getUserId().equals(user.getId())) throw new NotFoundException("Игрок не принадлежит текущему пользователю!!!");
+                .getUserId().equals(userId)) throw new NotFoundException("Игрок не принадлежит текущему пользователю!!!");
         return activePlayer;
     }
 
     @Override
-    public List<Player> getPlayersByUserLogin(String userLogin) {
-        User user = userService.findUserByLogin(userLogin).orElseThrow(() -> new NotFoundException("User not found"));
-        return playerService.getPlayers(userPlayerService.findIdsByUserId(user.getId()));
+    public List<Player> getPlayersByUserId(Long userId) {
+        return playerService.getPlayers(userPlayerService.findIdsByUserId(userId));
     }
+
 
     @Override
     public User getUserByPlayerId(Long playerId) {

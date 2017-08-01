@@ -120,7 +120,7 @@ public class FactionListController {
         final Long factionOwnerId = model.selectedFactionProperty().get().getOwnerId();
         UserDetailsServiceDolphin userDetails = (UserDetailsServiceDolphin) SecurityContextHolder.getContext().getAuthentication().getDetails();
         CurrentUserModel user = model.currentUserModelProperty().get();
-        Player activePlayer = aggregateUserService.getActivePlayerByUserLogin(contextHolderService.getCurrentUser().getLogin());
+        Player activePlayer = aggregateUserService.getActivePlayerByUserId(contextHolderService.getCurrentUser().getId());
         return factionOwnerId.equals(activePlayer.getId());
     }
 
@@ -141,8 +141,8 @@ public class FactionListController {
             final FactionModel factionModel = beanManager.create(FactionModel.class);
             factionModel.idProperty().set(faction.getId());
             factionModel.nameProperty().set(faction.getName());
-            factionModel.ownerIdProperty().set(aggregateUserService.getActivePlayerByUserLogin(contextHolderService.getCurrentUser().getLogin()).getId());
-            factionModel.ownerNameProperty().set(aggregateUserService.getActivePlayerByUserLogin(contextHolderService.getCurrentUser().getLogin()).getNick());
+            factionModel.ownerIdProperty().set(aggregateUserService.getActivePlayerByUserId(contextHolderService.getCurrentUser().getId()).getId());
+            factionModel.ownerNameProperty().set(aggregateUserService.getActivePlayerByUserId(contextHolderService.getCurrentUser().getId()).getNick());
             model.factionsProperty().add(factionModel);
         }
         catch (AccessDeniedException e){
