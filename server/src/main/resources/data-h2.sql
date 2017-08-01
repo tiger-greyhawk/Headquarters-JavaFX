@@ -94,7 +94,7 @@ CREATE TABLE IF NOT EXISTS `acl_object_identity` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=UTF8;
 */
 
-
+/*
 insert into acl_sid (id, principal, sid) values
 (1, 1, 'user1'),
 (2, 1, 'user2'),
@@ -147,7 +147,7 @@ INSERT INTO acl_entry (id, acl_object_identity, ace_order, sid, mask, granting, 
 (40, 7, 5, 3, 1, 1, 1, 1),
 (41, 8, 5, 3, 1, 1, 1, 1),
 (42, 9, 5, 3, 1, 1, 1, 1);
-
+*/
 /*
 //Tables of acl from http://docs.spring.io/spring-security/site/docs/4.2.3.RELEASE/reference/htmlsingle/#dbschema-acl
 
