@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<BorderPane xmlns:fx="http://javafx.com/fxml">
+    <top>
+        <FlowPane>
+            <padding>
+                <Insets top="25" bottom="25" right="25" left="25"/>
+            </padding>
+        </FlowPane>
+    </top>
+    <center>
+        <SplitPane>
+
+            <AnchorPane xmlns="http://javafx.com/javafx">
+                <TableView fx:id="factionTableView" AnchorPane.topAnchor="15" AnchorPane.leftAnchor="15" AnchorPane.rightAnchor="15" AnchorPane.bottomAnchor="120">
+                    <columns>
+                        <TableColumn fx:id="timeAttackTableInitiatorColumn" text="Initiator">
+                            <cellValueFactory><PropertyValueFactory property="initiator"/></cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="timeAttackTableTargetNickColumn" text="Target(player)">
+                            <cellValueFactory><PropertyValueFactory property="targetNick"/></cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="timeAttackTableTargetVillageIdColumn" text="Target(id village)">
+                            <cellValueFactory><PropertyValueFactory property="targetVillageId"/></cellValueFactory>
+                        </TableColumn>
+                        <TableColumn fx:id="timeAttackTableTimeColumn" text="Time(in when)">
+                            <cellValueFactory><PropertyValueFactory property="time"/></cellValueFactory>
+                        </TableColumn>
+                    </columns>
+                </TableView>
+            </AnchorPane>
+        </SplitPane>
+    </center>
+</BorderPane>
