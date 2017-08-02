@@ -7,20 +7,19 @@ import com.canoo.platform.server.DolphinModel;
 import com.canoo.platform.server.Param;
 import com.canoo.platform.server.binding.PropertyBinder;
 import name.timoshenko.communityhelper.common.Constants;
-import name.timoshenko.communityhelper.common.model.CurrentUserModel;
 import name.timoshenko.communityhelper.common.model.FactionListWindowModel;
 import name.timoshenko.communityhelper.common.model.FactionModel;
 import name.timoshenko.communityhelper.common.model.PlayerModel;
 import name.timoshenko.communityhelper.server.controller.Security.SecurityContextHolderService;
-import name.timoshenko.communityhelper.server.controller.Security.UserDetailsServiceDolphin;
 import name.timoshenko.communityhelper.server.model.domain.Faction;
 import name.timoshenko.communityhelper.server.model.domain.Player;
-import name.timoshenko.communityhelper.server.model.service.*;
+import name.timoshenko.communityhelper.server.model.service.FactionPlayerService;
+import name.timoshenko.communityhelper.server.model.service.FactionService;
+import name.timoshenko.communityhelper.server.model.service.PlayerService;
+import name.timoshenko.communityhelper.server.model.service.UserActivePlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.acls.model.NotFoundException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -49,7 +48,6 @@ public class FactionListController {
     private final SecurityContextHolderService contextHolderService;
     @Autowired
     private final UserActivePlayerService userActivePlayerService;
-    //private final UserPlayerService userPlayerService;
 
     @DolphinModel
     private FactionListWindowModel model;
@@ -109,20 +107,14 @@ public class FactionListController {
                     final PlayerModel playerModel = beanManager.create(PlayerModel.class);
                     playerModel.idProperty().set(player.getId());
                     playerModel.nicknameProperty().set(player.getNick());
-                    //playerModel.userIdProperty().set(player.getUserId());
                     playerModel.userIdProperty().set(player.getUserId());
                     return playerModel;
                 }).collect(Collectors.toList());
     }
 
     private boolean isCurrentUserOwnsCurrentFaction() {
-        final Long userId = model.currentUserModelProperty().get().userIdProperty().get();
         final Long factionOwnerId = model.selectedFactionProperty().get().getOwnerId();
-        UserDetailsServiceDolphin userDetails = (UserDetailsServiceDolphin) SecurityContextHolder.getContext().getAuthentication().getDetails();
-        CurrentUserModel user = model.currentUserModelProperty().get();
-        Player activePlayer = playerService.findPlayer(userActivePlayerService.getActivePlayer(contextHolderService.getCurrentUser().getId())
-                .getActivePlayerId())
-                .orElseThrow(() -> new NotFoundException("не найден игрок"));
+        Player activePlayer = userActivePlayerService.getActivePlayer(contextHolderService.getCurrentUser().getId());
         return factionOwnerId.equals(activePlayer.getId());
     }
 
@@ -143,13 +135,9 @@ public class FactionListController {
             final FactionModel factionModel = beanManager.create(FactionModel.class);
             factionModel.idProperty().set(faction.getId());
             factionModel.nameProperty().set(faction.getName());
-            factionModel.ownerIdProperty().set(playerService.findPlayer(userActivePlayerService.getActivePlayer(contextHolderService.getCurrentUser().getId())
-                    .getActivePlayerId())
-                    .orElseThrow(() -> new NotFoundException("не найден активный игрок текущего пользователя"))
+            factionModel.ownerIdProperty().set(userActivePlayerService.getActivePlayer(contextHolderService.getCurrentUser().getId())
                     .getId());
-            factionModel.ownerNameProperty().set(playerService.findPlayer(userActivePlayerService.getActivePlayer(contextHolderService.getCurrentUser().getId())
-                    .getActivePlayerId())
-                    .orElseThrow(() -> new NotFoundException("не найден активный игрок текущего пользователя"))
+            factionModel.ownerNameProperty().set(userActivePlayerService.getActivePlayer(contextHolderService.getCurrentUser().getId())
                     .getNick());
             model.factionsProperty().add(factionModel);
         }
