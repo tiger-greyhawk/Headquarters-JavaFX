@@ -12,19 +12,19 @@ public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private final Long id;
-    //@Column(name = "user_id", nullable = false)
-    //private final Long userId;
+    @Column(name = "user_id", nullable = false)
+    private final Long userId;
     @Column(name = "nick", nullable = false)
     private final String nick;
 
 
     public Player() {
-        this(null, null);
+        this(null, null, null);
     }
 
-    //public Player(Long id, Long userId, String nick) {
-    public Player(Long id, String nick) {
+    public Player(Long id, Long userId, String nick) {
         this.id = id;
+        this.userId = userId;
         this.nick = nick;
     }
 
@@ -32,9 +32,9 @@ public class Player {
         return id;
     }
 
-    /*public Long getUserId() {
+    public Long getUserId() {
         return userId;
-    }*/
+    }
 
     public String getNick() {
         return nick;
@@ -44,7 +44,7 @@ public class Player {
     public String toString() {
         return "Player{" +
                 "id=" + id +
-//                ", userId=" + userId +
+                ", userId=" + userId +
                 ", nick='" + nick + '\'' +
                 '}';
     }

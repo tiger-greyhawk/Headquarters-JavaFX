@@ -45,8 +45,13 @@ public class BasicPlayerService implements PlayerService {
 
 
     @Override
-    public Optional<Player> findPlayer(long id) {
+    public Optional<Player> findPlayer(Long id) {
         return Optional.ofNullable(playerRepository.findOne(id));
+    }
+
+    @Override
+    public List<Player> findPlayersByUserId(Long userId) {
+        return (playerRepository.findByUserId(userId));
     }
 
     @Override

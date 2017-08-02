@@ -4,10 +4,12 @@ import name.timoshenko.communityhelper.server.model.domain.Player;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  *
  */
 @Repository
 public interface PlayerRepository extends JpaRepository<Player, Long> {
-    //List<Player> findByUserId(long userId);
+    List<Player> findByUserId(long userId);
 }
