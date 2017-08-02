@@ -15,10 +15,7 @@ import name.timoshenko.communityhelper.server.controller.Security.SecurityContex
 import name.timoshenko.communityhelper.server.controller.Security.UserDetailsServiceDolphin;
 import name.timoshenko.communityhelper.server.model.domain.Faction;
 import name.timoshenko.communityhelper.server.model.domain.Player;
-import name.timoshenko.communityhelper.server.model.service.FactionPlayerService;
-import name.timoshenko.communityhelper.server.model.service.FactionService;
-import name.timoshenko.communityhelper.server.model.service.PlayerService;
-import name.timoshenko.communityhelper.server.model.service.aggregate.AggregateUserService;
+import name.timoshenko.communityhelper.server.model.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.AccessDeniedException;
@@ -47,10 +44,12 @@ public class FactionListController {
     private final BeanManager beanManager;
     private final PropertyBinder propertyBinder;
 
+
     @Autowired
     private final SecurityContextHolderService contextHolderService;
     @Autowired
-    private final AggregateUserService aggregateUserService;
+    private final UserActivePlayerService userActivePlayerService;
+    //private final UserPlayerService userPlayerService;
 
     @DolphinModel
     private FactionListWindowModel model;
@@ -66,7 +65,7 @@ public class FactionListController {
                                  BeanManager beanManager,
                                  PropertyBinder propertyBinder,
                                  SecurityContextHolderService securityContextHolderService,
-                                 AggregateUserService aggregateUserService) {
+                                 UserActivePlayerService userActivePlayerService) {
         this.factionService = factionService;
         this.factionPlayerService = factionPlayerService;
         this.playerService = playerService;
@@ -74,7 +73,7 @@ public class FactionListController {
         this.beanManager = beanManager;
         this.propertyBinder = propertyBinder;
         this.contextHolderService = securityContextHolderService;
-        this.aggregateUserService = aggregateUserService;
+        this.userActivePlayerService = userActivePlayerService;
     }
 
     private Collection<FactionModel> getFactionList(final String filter) {
@@ -111,7 +110,7 @@ public class FactionListController {
                     playerModel.idProperty().set(player.getId());
                     playerModel.nicknameProperty().set(player.getNick());
                     //playerModel.userIdProperty().set(player.getUserId());
-                    playerModel.userIdProperty().set(aggregateUserService.getUserByPlayerId(player.getId()).getId());
+                    playerModel.userIdProperty().set(player.getUserId());
                     return playerModel;
                 }).collect(Collectors.toList());
     }
@@ -121,8 +120,9 @@ public class FactionListController {
         final Long factionOwnerId = model.selectedFactionProperty().get().getOwnerId();
         UserDetailsServiceDolphin userDetails = (UserDetailsServiceDolphin) SecurityContextHolder.getContext().getAuthentication().getDetails();
         CurrentUserModel user = model.currentUserModelProperty().get();
-        Player activePlayer = aggregateUserService.getActivePlayerByUserId(contextHolderService.getCurrentUser().getId())
-                .orElseThrow(() -> new NotFoundException("не найден активный игрок текущего пользователя"));
+        Player activePlayer = playerService.findPlayer(userActivePlayerService.getActivePlayer(contextHolderService.getCurrentUser().getId())
+                .getActivePlayerId())
+                .orElseThrow(() -> new NotFoundException("не найден игрок"));
         return factionOwnerId.equals(activePlayer.getId());
     }
 
@@ -143,10 +143,12 @@ public class FactionListController {
             final FactionModel factionModel = beanManager.create(FactionModel.class);
             factionModel.idProperty().set(faction.getId());
             factionModel.nameProperty().set(faction.getName());
-            factionModel.ownerIdProperty().set(aggregateUserService.getActivePlayerByUserId(contextHolderService.getCurrentUser().getId())
+            factionModel.ownerIdProperty().set(playerService.findPlayer(userActivePlayerService.getActivePlayer(contextHolderService.getCurrentUser().getId())
+                    .getActivePlayerId())
                     .orElseThrow(() -> new NotFoundException("не найден активный игрок текущего пользователя"))
                     .getId());
-            factionModel.ownerNameProperty().set(aggregateUserService.getActivePlayerByUserId(contextHolderService.getCurrentUser().getId())
+            factionModel.ownerNameProperty().set(playerService.findPlayer(userActivePlayerService.getActivePlayer(contextHolderService.getCurrentUser().getId())
+                    .getActivePlayerId())
                     .orElseThrow(() -> new NotFoundException("не найден активный игрок текущего пользователя"))
                     .getNick());
             model.factionsProperty().add(factionModel);
