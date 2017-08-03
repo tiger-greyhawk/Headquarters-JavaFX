@@ -35,8 +35,13 @@ public class CachedFactionService implements FactionService {
     }
 
     @Override
+    public Faction findFactionByOwnerId(Long ownerId){
+        return source.findFactionByOwnerId(ownerId);
+    }
+
+    @Override
     public Optional<Faction> getFactionById(Long factionId){
-        return null;
+        return source.getFactionById(factionId);
     }
 
     @Override

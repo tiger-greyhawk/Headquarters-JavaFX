@@ -2,6 +2,7 @@ package name.timoshenko.communityhelper.client.controller;
 
 import com.canoo.platform.client.ClientContext;
 import com.canoo.platform.client.ControllerActionException;
+import com.canoo.platform.client.Param;
 import com.canoo.platform.client.javafx.FXBinder;
 import com.canoo.platform.client.javafx.binding.FXWrapper;
 import javafx.fxml.FXML;
@@ -34,6 +35,8 @@ public class FactionListView extends StagedFXMLViewBinder<FactionListWindowModel
     @FXML
     private TableColumn<FactionModel, String> factionTableOwnerColumn;
     @FXML
+    private TableColumn<FactionModel, String> factionTableAllyColumn;
+    @FXML
     private TableColumn<PlayerModel, Long> factionPlayersTableIdColumn;
     @FXML
     private TableColumn<PlayerModel, Long> factionPlayersTableUserIdColumn;
@@ -41,6 +44,8 @@ public class FactionListView extends StagedFXMLViewBinder<FactionListWindowModel
     private TableColumn<PlayerModel, String> factionPlayersTableNickColumn;
     @FXML
     private Button deleteFactionButton;
+    @FXML
+    private Button createAllyFactionButton;
     @FXML
     private TextField loginProperty;
 
@@ -65,6 +70,7 @@ public class FactionListView extends StagedFXMLViewBinder<FactionListWindowModel
 
         factionTableNameColumn.setCellValueFactory(e -> FXWrapper.wrapObjectProperty(e.getValue().nameProperty()));
         factionTableOwnerColumn.setCellValueFactory(e -> FXWrapper.wrapObjectProperty(e.getValue().ownerNameProperty()));
+        factionTableAllyColumn.setCellValueFactory(e -> FXWrapper.wrapObjectProperty(e.getValue().typeAllyProperty()));
 
         factionPlayersTableIdColumn.setCellValueFactory(e->FXWrapper.wrapObjectProperty(e.getValue().idProperty()));
         factionPlayersTableUserIdColumn.setCellValueFactory(e->FXWrapper.wrapObjectProperty(e.getValue().userIdProperty()));
@@ -83,6 +89,14 @@ public class FactionListView extends StagedFXMLViewBinder<FactionListWindowModel
         // it will be initialized with an object once and only once (in LoginView) and will be attached at that exact time.
         getModel().currentUserModelProperty().onChanged(v -> FXBinder.bind(loginProperty.textProperty())
                 .bidirectionalTo(getModel().currentUserModelProperty().get().loginProperty()));
+
+        if (1==1) throw new RuntimeException("переделать код ниже");
+        Param param1 = new Param("notation", "yes22");
+        Param param2 = new Param("factionId", factionTableView.getSelectionModel().getSelectedItem().getId());
+        if (factionTableView.getSelectionModel().getSelectedItem() != null)
+            System.out.println("null in selected item");
+
+        createAllyFactionButton.setOnAction(event -> invoke(Constants.CREATE_ALLIES_FACTION_EVENT, param1, param2));
 
         deleteFactionButton.setOnAction(e -> invoke(Constants.DELETE_FACTION_EVENT));
         deleteFactionButton.setDisable(true);

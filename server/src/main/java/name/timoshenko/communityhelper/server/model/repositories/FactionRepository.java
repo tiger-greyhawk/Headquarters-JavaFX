@@ -12,4 +12,5 @@ import java.util.List;
 @Repository
 public interface FactionRepository extends JpaRepository<Faction, Long> {
     List<Faction> findByNameLike(String like);
+    Faction findByOwnerId(Long ownerId);
 }

@@ -12,6 +12,8 @@ public class FactionModel {
     private Property<String> name;
     private Property<Long> ownerId;
     private Property<String> ownerName;
+    private Property<String> alliedFaction;
+    private Property<String> typeAlly;
 
     public Property<Long> idProperty() {
         return id;
@@ -29,6 +31,14 @@ public class FactionModel {
         return ownerName;
     }
 
+    public Property<String> alliedFactionProperty() {
+        return alliedFaction;
+    }
+
+    public Property<String> typeAllyProperty() {
+        return typeAlly;
+    }
+
     public Long getId() {
         return id.get();
     }
@@ -44,4 +54,8 @@ public class FactionModel {
     public String getOwnerName() {
         return ownerName.get();
     }
+
+    public String getAlliedFaction() {return alliedFaction.get(); }
+
+    public String getTypeAlly() {return typeAlly.get(); }
 }

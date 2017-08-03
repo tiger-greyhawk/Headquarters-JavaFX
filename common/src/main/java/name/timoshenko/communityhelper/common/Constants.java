@@ -15,4 +15,5 @@ public interface Constants {
     String LOGIN_EVENT = "LoginEvent";
     String CREATE_FACTION_EVENT = "CreateFactionEvent";
     String DELETE_FACTION_EVENT = "DeleteFactionEvent";
+    String CREATE_ALLIES_FACTION_EVENT = "CreateAlliesFactionEvent";
 }

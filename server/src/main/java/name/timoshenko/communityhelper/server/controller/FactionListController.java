@@ -11,12 +11,11 @@ import name.timoshenko.communityhelper.common.model.FactionListWindowModel;
 import name.timoshenko.communityhelper.common.model.FactionModel;
 import name.timoshenko.communityhelper.common.model.PlayerModel;
 import name.timoshenko.communityhelper.server.controller.Security.SecurityContextHolderService;
+import name.timoshenko.communityhelper.server.model.domain.AllyOfFaction;
 import name.timoshenko.communityhelper.server.model.domain.Faction;
 import name.timoshenko.communityhelper.server.model.domain.Player;
-import name.timoshenko.communityhelper.server.model.service.FactionPlayerService;
-import name.timoshenko.communityhelper.server.model.service.FactionService;
-import name.timoshenko.communityhelper.server.model.service.PlayerService;
-import name.timoshenko.communityhelper.server.model.service.UserActivePlayerService;
+import name.timoshenko.communityhelper.server.model.domain.User;
+import name.timoshenko.communityhelper.server.model.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.AccessDeniedException;
@@ -26,6 +25,7 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,6 +48,8 @@ public class FactionListController {
     private final SecurityContextHolderService contextHolderService;
     @Autowired
     private final UserActivePlayerService userActivePlayerService;
+    @Autowired
+    private final AllyOfFactionService allyOfFactionService;
 
     @DolphinModel
     private FactionListWindowModel model;
@@ -63,7 +65,8 @@ public class FactionListController {
                                  BeanManager beanManager,
                                  PropertyBinder propertyBinder,
                                  SecurityContextHolderService securityContextHolderService,
-                                 UserActivePlayerService userActivePlayerService) {
+                                 UserActivePlayerService userActivePlayerService,
+                                 AllyOfFactionService allyOfFactionService) {
         this.factionService = factionService;
         this.factionPlayerService = factionPlayerService;
         this.playerService = playerService;
@@ -72,7 +75,9 @@ public class FactionListController {
         this.propertyBinder = propertyBinder;
         this.contextHolderService = securityContextHolderService;
         this.userActivePlayerService = userActivePlayerService;
+        this.allyOfFactionService = allyOfFactionService;
     }
+
 
     private Collection<FactionModel> getFactionList(final String filter) {
         final List<Faction> factions = factionService.getFactions(filter);
@@ -85,8 +90,36 @@ public class FactionListController {
                     factionModel.ownerNameProperty().set(
                             playerService.findPlayer(faction.getOwnerId()).map(Player::getNick).orElse("")
                     );
+                    factionModel.typeAllyProperty().set(getAlliedStatus(faction));
                     return factionModel;
                 }).collect(Collectors.toList());
+    }
+
+    private String getAlliedStatus(Faction factionToCheck){
+        User currentUser = contextHolderService.getCurrentUser();
+        if (currentUser == null) return null;
+        Faction myFaction = getMyCurrentFaction();
+        String result = "";
+        /*TODO переделать List<AllyOfFaction>
+        Здесь слишком дорого объявлять этот массив.
+         */
+        final List<AllyOfFaction> allyFactions = allyOfFactionService.findAllyFactions(myFaction.getId());
+        for (AllyOfFaction ally:allyFactions){
+            if ((ally.getFirstFactionId().equals(myFaction.getId()) &&  ally.getSecondFactionId().equals(factionToCheck.getId()))
+                || (ally.getFirstFactionId().equals(factionToCheck.getId()) && ally.getSecondFactionId().equals(myFaction.getId())))
+                //result = ally.getAllyType().name();
+                result = ally.getNotation();
+        }
+        return result;
+
+    }
+
+    private Faction getMyCurrentFaction(){
+        return factionService.findFactionByOwnerId(
+                userActivePlayerService.getActivePlayer(
+                        contextHolderService.getCurrentUser().getId()
+                ).getId()
+        );
     }
 
     private Collection<PlayerModel> getPlayers(final Long factionId) {
@@ -146,10 +179,30 @@ public class FactionListController {
         }
     }
 
+    @DolphinAction(Constants.CREATE_ALLIES_FACTION_EVENT)
+    private void createAlliesFaction(@Param("notation") String notation, @Param("faction") Long factionModel){
+        Faction myFaction = getMyCurrentFaction();
+        FactionModel factionModelToAlly = model.selectedFactionProperty().get();
+        if (factionModelToAlly.equals(myFaction)) return;
+        AllyOfFaction toAlly = new AllyOfFaction(0L, myFaction.getId(), factionModelToAlly.getId(), notation, AllyOfFaction.allyTypeEnum.NULLY, new Date());
+
+
+        try {
+            AllyOfFaction alliedFaction = allyOfFactionService.save(toAlly);
+            factionModelToAlly.typeAllyProperty().set(alliedFaction.getAllyType().name());
+            model.factionsProperty().set(model.factionsProperty().indexOf(factionModelToAlly), factionModelToAlly);
+            model.selectedFactionProperty().set(factionModelToAlly);
+        }
+        catch (AccessDeniedException e){
+            throw new NotImplementedException();
+        }
+    }
+
     /**
      * Метод, выполняющийся при подключении клиента и выполняющий основную приязку к событиям.
      */
     @PostConstruct
+    @DolphinAction(Constants.LOGIN_EVENT)
     public void init() {
         propertyBinder.bind(model.windowVisibleProperty(), Qualifiers.FACTION_WINDOW_VISIBLE_QUALIFIER);
         propertyBinder.bind(model.currentUserModelProperty(), Qualifiers.CURRENT_USER_MODEL_QUALIFIER);

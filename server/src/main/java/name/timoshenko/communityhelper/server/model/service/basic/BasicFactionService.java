@@ -32,6 +32,11 @@ public class BasicFactionService implements FactionService {
     }
 
     @Override
+    public Faction findFactionByOwnerId(Long ownerId) {
+        return factionRepository.findByOwnerId(ownerId);
+    }
+
+    @Override
     public Optional<Faction> getFactionById(Long factionId){
         return Optional.ofNullable(factionRepository.findOne(factionId));
     }
