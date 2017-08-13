@@ -5,6 +5,7 @@ import name.timoshenko.communityhelper.server.model.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.acls.model.NotFoundException;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -37,9 +38,15 @@ public class SecurityContextHolderServiceImpl implements SecurityContextHolderSe
         return SecurityContextHolder.getContext().getAuthentication();
     }
 
+    /**
+     * Возвращает из контекста текущего пользователя или пользователя anonymousUser с id=0 если пользователь не залогинен.
+     * @return
+     */
     @Override
     public User getCurrentUser(){
-        if (SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString().equals("anonymousUser")) return null;
+        SimpleGrantedAuthority roleAnonymous = new SimpleGrantedAuthority("ROLE_ANONYMOUS");
+        if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(roleAnonymous))
+            return new User(0L, "anonymousUser", "");
         UserDetails userDetails = ((UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         return userService.findUserByLogin(userDetails.getUsername()).orElseThrow(() -> new NotFoundException("User not found"));
     }

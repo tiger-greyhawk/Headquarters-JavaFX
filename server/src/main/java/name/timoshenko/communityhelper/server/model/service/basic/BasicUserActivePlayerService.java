@@ -30,6 +30,7 @@ public class BasicUserActivePlayerService implements UserActivePlayerService {
 
     @Override
     public Player getActivePlayer(Long userId) {
+        if (userId == 0L) return new Player(0L, 0L, "nullPlayer");
         return playerService.findPlayer(userActivePlayerRepository.findByUserId(userId)
                 .orElseThrow(()->new NotFoundException("не найден активный игрок данного пользователя"))
                 .getActivePlayerId())

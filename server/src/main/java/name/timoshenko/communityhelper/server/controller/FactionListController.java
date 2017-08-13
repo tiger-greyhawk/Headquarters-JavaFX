@@ -97,7 +97,7 @@ public class FactionListController {
 
     private String getAlliedStatus(Faction factionToCheck){
         User currentUser = contextHolderService.getCurrentUser();
-        if (currentUser == null) return null;
+        if ((currentUser == null) || (currentUser.getId().equals(0L)))return null;
         Faction myFaction = getMyCurrentFaction();
         String result = "";
         /*TODO переделать List<AllyOfFaction>
