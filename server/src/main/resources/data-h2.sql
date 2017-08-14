@@ -17,7 +17,7 @@ insert into players (id, user_id, nick) values
     (8, 4, 'Player8'),
     (9, 4, 'PlayerNullUser');
 
-insert into faction_allies (id, first_faction_id, second_faction_id, notation, ally_type, created_date) values
+insert into faction_allies (id, first_faction_id, second_faction_id, note, ally_type, created_date) values
     (1, 1, 3, 'no', 0, '2014-04-04 10:10:17.78'),
     (2, 3, 1, 'yes', 0, '2014-04-04 10:10:17.78');
 

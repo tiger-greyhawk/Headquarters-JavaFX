@@ -27,11 +27,11 @@ public class AllyOfFaction implements Serializable {
      */
     private Long secondFactionId;
 
-    @Column(name = "notation")
+    @Column(name = "note")
     /**
      * Заметка для firstFactionId. Заметка для обратной стороны будет в ответной записи.
      */
-    private String notation;
+    private String note;
 
     /*TODO важно!!! Реализовать через отдельную таблицу?
     Сделать связь многие ко многим. Отдельно описание союзника (данный entity), а отдельно связи:
@@ -55,11 +55,11 @@ public class AllyOfFaction implements Serializable {
     public AllyOfFaction() { this(0L, 0L, 0L, "", allyTypeEnum.NULLY, new Date());
     }
 
-    public AllyOfFaction(Long id, Long firstFactionId, Long secondFactionId, String notation, allyTypeEnum allyType, Date createdDate) {
+    public AllyOfFaction(Long id, Long firstFactionId, Long secondFactionId, String note, allyTypeEnum allyType, Date createdDate) {
         this.id = id;
         this.firstFactionId = firstFactionId;
         this.secondFactionId = secondFactionId;
-        this.notation = notation;
+        this.note = note;
         this.allyType = allyType;
         this.createdDate = createdDate;
     }
@@ -76,8 +76,8 @@ public class AllyOfFaction implements Serializable {
         return secondFactionId;
     }
 
-    public String getNotation() {
-        return notation;
+    public String getNote() {
+        return note;
     }
 
     public Enum getAllyType() {
@@ -94,7 +94,7 @@ public class AllyOfFaction implements Serializable {
                 "id=" + id +
                 ", firstFactionId=" + firstFactionId +
                 ", secondFactionId=" + secondFactionId +
-                ", firstFactionNotation='" + notation + '\'' +
+                ", firstFactionNotation='" + note + '\'' +
                 ", allyType=" + allyType +
                 ", createdDate=" + createdDate +
                 '}';

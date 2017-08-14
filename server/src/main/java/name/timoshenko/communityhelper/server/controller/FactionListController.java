@@ -108,7 +108,7 @@ public class FactionListController {
             if ((ally.getFirstFactionId().equals(myFaction.getId()) &&  ally.getSecondFactionId().equals(factionToCheck.getId()))
                 || (ally.getFirstFactionId().equals(factionToCheck.getId()) && ally.getSecondFactionId().equals(myFaction.getId())))
                 //result = ally.getAllyType().name();
-                result = ally.getNotation();
+                result = ally.getNote();
         }
         return result;
 
