@@ -6,10 +6,7 @@ import com.canoo.platform.client.Param;
 import com.canoo.platform.client.javafx.FXBinder;
 import com.canoo.platform.client.javafx.binding.FXWrapper;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import name.timoshenko.communityhelper.common.Constants;
 import name.timoshenko.communityhelper.common.model.FactionListWindowModel;
@@ -17,6 +14,7 @@ import name.timoshenko.communityhelper.common.model.FactionModel;
 import name.timoshenko.communityhelper.common.model.PlayerModel;
 
 import java.net.URL;
+import java.util.Optional;
 
 /**
  *
@@ -45,7 +43,9 @@ public class FactionListView extends StagedFXMLViewBinder<FactionListWindowModel
     @FXML
     private Button deleteFactionButton;
     @FXML
-    private Button createAllyFactionButton;
+    private Button createFactionButton;
+    @FXML
+    private Button allyFactionButton;
     @FXML
     private TextField loginProperty;
 
@@ -60,6 +60,7 @@ public class FactionListView extends StagedFXMLViewBinder<FactionListWindowModel
         // при изменении значения переменной показывать или скрывать окно
         getModel().windowVisibleProperty().onChanged(v -> {
             if (Boolean.TRUE.equals(v.getNewValue())) {
+                getStage().setOnShowing(event -> invoke(Constants.SHOW_EVENT));
                 getStage().show();
             } else  {
                 getStage().hide();
@@ -90,13 +91,25 @@ public class FactionListView extends StagedFXMLViewBinder<FactionListWindowModel
         getModel().currentUserModelProperty().onChanged(v -> FXBinder.bind(loginProperty.textProperty())
                 .bidirectionalTo(getModel().currentUserModelProperty().get().loginProperty()));
 
-        if (1==1) throw new RuntimeException("переделать код ниже");
-        Param param1 = new Param("notation", "yes22");
-        Param param2 = new Param("factionId", factionTableView.getSelectionModel().getSelectedItem().getId());
-        if (factionTableView.getSelectionModel().getSelectedItem() != null)
-            System.out.println("null in selected item");
+        //if (1==1) throw new RuntimeException("переделать код ниже");
 
-        createAllyFactionButton.setOnAction(event -> invoke(Constants.CREATE_ALLIES_FACTION_EVENT, param1, param2));
+        //Param param2 = new Param("factionId", factionTableView.getSelectionModel().getSelectedItem().getId());
+        //if (factionTableView.getSelectionModel().getSelectedItem() != null)
+        //    System.out.println("null in selected item");
+
+        allyFactionButton.setOnAction(event -> {
+            String allyNote= ShowAllyFactionDialog(getModel().selectedFactionProperty().get().getName());
+            if (allyNote.isEmpty()) return;
+            Param allyNoteParam = new Param("note", allyNote);
+            invoke(Constants.SET_ALLY_FACTION_EVENT, allyNoteParam);
+        });
+
+        createFactionButton.setOnAction(event -> {
+            String factionName = ShowCreateFactionDialog();
+            if (factionName.isEmpty()) return;
+            Param factionNameParam = new Param("factionName", factionName);
+            invoke(Constants.CREATE_FACTION_EVENT, factionNameParam);
+        });
 
         deleteFactionButton.setOnAction(e -> invoke(Constants.DELETE_FACTION_EVENT));
         deleteFactionButton.setDisable(true);
@@ -110,6 +123,29 @@ public class FactionListView extends StagedFXMLViewBinder<FactionListWindowModel
                     }
                 });
 
+    }
+
+    private String ShowCreateFactionDialog(){
+        TextInputDialog dialog = new TextInputDialog("Faction name");
+        dialog.setTitle("Create faction");
+        dialog.setHeaderText("Do you want create new faction?");
+        dialog.setContentText("Please enter faction name:");
+
+        Optional<String> result = dialog.showAndWait();
+        return result.orElse("");
+    }
+
+    private String ShowAllyFactionDialog(String factionNameToAlly){
+        TextInputDialog dialog = new TextInputDialog("older allies");
+        dialog.setTitle("Ally");
+        dialog.setHeaderText("Do you want to ally with "+factionNameToAlly+"?");
+        dialog.setContentText("Please enter note (required):");
+
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()){
+            return result.orElse("");
+        }
+        else return "";
     }
 
     @Override

@@ -35,8 +35,8 @@
                 </TableView>
                 <Button fx:id="deleteFactionButton" AnchorPane.bottomAnchor="120" AnchorPane.leftAnchor="15" AnchorPane.rightAnchor="15">Delete</Button>
                 <Button AnchorPane.bottomAnchor="85" AnchorPane.leftAnchor="15" AnchorPane.rightAnchor="15">Join</Button>
-                <Button AnchorPane.bottomAnchor="50" AnchorPane.leftAnchor="15" AnchorPane.rightAnchor="15">Create</Button>
-                <Button fx:id="createAllyFactionButton" AnchorPane.bottomAnchor="15" AnchorPane.leftAnchor="15" AnchorPane.rightAnchor="15">Ally</Button>
+                <Button fx:id="createFactionButton" AnchorPane.bottomAnchor="50" AnchorPane.leftAnchor="15" AnchorPane.rightAnchor="15">Create</Button>
+                <Button fx:id="allyFactionButton" AnchorPane.bottomAnchor="15" AnchorPane.leftAnchor="15" AnchorPane.rightAnchor="15">Ally</Button>
             </AnchorPane>
             <AnchorPane>
                 <TableView fx:id="factionPlayersTableView" AnchorPane.topAnchor="15" AnchorPane.leftAnchor="15" AnchorPane.rightAnchor="15" AnchorPane.bottomAnchor="120">

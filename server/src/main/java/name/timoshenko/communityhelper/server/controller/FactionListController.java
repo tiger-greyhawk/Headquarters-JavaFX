@@ -11,11 +11,12 @@ import name.timoshenko.communityhelper.common.model.FactionListWindowModel;
 import name.timoshenko.communityhelper.common.model.FactionModel;
 import name.timoshenko.communityhelper.common.model.PlayerModel;
 import name.timoshenko.communityhelper.server.controller.Security.SecurityContextHolderService;
+import name.timoshenko.communityhelper.server.controller.service.FactionListService;
 import name.timoshenko.communityhelper.server.model.domain.AllyOfFaction;
 import name.timoshenko.communityhelper.server.model.domain.Faction;
 import name.timoshenko.communityhelper.server.model.domain.Player;
-import name.timoshenko.communityhelper.server.model.domain.User;
 import name.timoshenko.communityhelper.server.model.service.*;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.AccessDeniedException;
@@ -36,6 +37,8 @@ import java.util.stream.Collectors;
 @DolphinController(Constants.FACTION_LIST_CONTROLLER_NAME)
 public class FactionListController {
 
+    private org.slf4j.Logger LOG = LoggerFactory.getLogger(FactionListController.class);
+
     private final FactionService factionService;
     private final FactionPlayerService factionPlayerService;
     private final PlayerService playerService;
@@ -50,6 +53,8 @@ public class FactionListController {
     private final UserActivePlayerService userActivePlayerService;
     @Autowired
     private final AllyOfFactionService allyOfFactionService;
+    @Autowired
+    private final FactionListService factionListService;
 
     @DolphinModel
     private FactionListWindowModel model;
@@ -66,7 +71,8 @@ public class FactionListController {
                                  PropertyBinder propertyBinder,
                                  SecurityContextHolderService securityContextHolderService,
                                  UserActivePlayerService userActivePlayerService,
-                                 AllyOfFactionService allyOfFactionService) {
+                                 AllyOfFactionService allyOfFactionService,
+                                 FactionListService factionListService) {
         this.factionService = factionService;
         this.factionPlayerService = factionPlayerService;
         this.playerService = playerService;
@@ -76,11 +82,12 @@ public class FactionListController {
         this.contextHolderService = securityContextHolderService;
         this.userActivePlayerService = userActivePlayerService;
         this.allyOfFactionService = allyOfFactionService;
+        this.factionListService = factionListService;
     }
 
 
     private Collection<FactionModel> getFactionList(final String filter) {
-        final List<Faction> factions = factionService.getFactions(filter);
+        final List<Faction> factions = factionListService.getFactions(filter);
         return factions.stream()
                 .map(faction -> {
                     final FactionModel factionModel = beanManager.create(FactionModel.class);
@@ -90,37 +97,11 @@ public class FactionListController {
                     factionModel.ownerNameProperty().set(
                             playerService.findPlayer(faction.getOwnerId()).map(Player::getNick).orElse("")
                     );
-                    factionModel.typeAllyProperty().set(getAlliedStatus(faction));
+                    factionModel.typeAllyProperty().set(factionListService.getAlliedStatus(faction));
                     return factionModel;
                 }).collect(Collectors.toList());
     }
 
-    private String getAlliedStatus(Faction factionToCheck){
-        User currentUser = contextHolderService.getCurrentUser();
-        if ((currentUser == null) || (currentUser.getId().equals(0L)))return null;
-        Faction myFaction = getMyCurrentFaction();
-        String result = "";
-        /*TODO переделать List<AllyOfFaction>
-        Здесь слишком дорого объявлять этот массив.
-         */
-        final List<AllyOfFaction> allyFactions = allyOfFactionService.findAllyFactions(myFaction.getId());
-        for (AllyOfFaction ally:allyFactions){
-            if ((ally.getFirstFactionId().equals(myFaction.getId()) &&  ally.getSecondFactionId().equals(factionToCheck.getId()))
-                || (ally.getFirstFactionId().equals(factionToCheck.getId()) && ally.getSecondFactionId().equals(myFaction.getId())))
-                //result = ally.getAllyType().name();
-                result = ally.getNote();
-        }
-        return result;
-
-    }
-
-    private Faction getMyCurrentFaction(){
-        return factionService.findFactionByOwnerId(
-                userActivePlayerService.getActivePlayer(
-                        contextHolderService.getCurrentUser().getId()
-                ).getId()
-        );
-    }
 
     private Collection<PlayerModel> getPlayers(final Long factionId) {
         final List<Long> factionPlayersIds = factionPlayerService.findPlayersByFactionId(factionId).stream().collect(Collectors.toList());
@@ -145,11 +126,12 @@ public class FactionListController {
                 }).collect(Collectors.toList());
     }
 
-    private boolean isCurrentUserOwnsCurrentFaction() {
+
+    /*private boolean isCurrentUserOwnsCurrentFaction() {
         final Long factionOwnerId = model.selectedFactionProperty().get().getOwnerId();
         Player activePlayer = userActivePlayerService.getActivePlayer(contextHolderService.getCurrentUser().getId());
         return factionOwnerId.equals(activePlayer.getId());
-    }
+    }*/
 
     @DolphinAction(Constants.DELETE_FACTION_EVENT)
     private void deleteFaction(){
@@ -162,8 +144,9 @@ public class FactionListController {
     }
 
     @DolphinAction(Constants.CREATE_FACTION_EVENT)
-    private void createFaction(@Param Faction factionToCreate){
+    private void createFaction(@Param("factionName") String factionName){
         try {
+            Faction factionToCreate = new Faction(0L, factionName, userActivePlayerService.getActivePlayer(contextHolderService.getCurrentUser().getId()).getId());
             Faction faction = factionService.createFaction(factionToCreate);
             final FactionModel factionModel = beanManager.create(FactionModel.class);
             factionModel.idProperty().set(faction.getId());
@@ -179,12 +162,12 @@ public class FactionListController {
         }
     }
 
-    @DolphinAction(Constants.CREATE_ALLIES_FACTION_EVENT)
-    private void createAlliesFaction(@Param("notation") String notation, @Param("faction") Long factionModel){
-        Faction myFaction = getMyCurrentFaction();
+    @DolphinAction(Constants.SET_ALLY_FACTION_EVENT)
+    private void createAlliesFaction(@Param("note") String note, @Param("faction") Long factionModel){
+        Faction myFaction = factionListService.getMyCurrentFaction();
         FactionModel factionModelToAlly = model.selectedFactionProperty().get();
         if (factionModelToAlly.equals(myFaction)) return;
-        AllyOfFaction toAlly = new AllyOfFaction(0L, myFaction.getId(), factionModelToAlly.getId(), notation, AllyOfFaction.allyTypeEnum.NULLY, new Date());
+        AllyOfFaction toAlly = new AllyOfFaction(0L, myFaction.getId(), factionModelToAlly.getId(), note, AllyOfFaction.allyTypeEnum.NULLY, new Date());
 
 
         try {
@@ -198,14 +181,9 @@ public class FactionListController {
         }
     }
 
-    /**
-     * Метод, выполняющийся при подключении клиента и выполняющий основную приязку к событиям.
-     */
-    @PostConstruct
-    @DolphinAction(Constants.LOGIN_EVENT)
-    public void init() {
-        propertyBinder.bind(model.windowVisibleProperty(), Qualifiers.FACTION_WINDOW_VISIBLE_QUALIFIER);
-        propertyBinder.bind(model.currentUserModelProperty(), Qualifiers.CURRENT_USER_MODEL_QUALIFIER);
+    @DolphinAction(Constants.SHOW_EVENT)
+    public void onShow(){
+        model.factionsProperty().clear();
         model.factionsProperty().addAll(getFactionList(""));
         model.filterProperty().onChanged(v -> {
                     model.factionsProperty().clear();
@@ -218,9 +196,21 @@ public class FactionListController {
             model.cannotDeleteCurrentFactionProperty().set(true);
             if (v != null && v.getNewValue() != null) {
                 model.playersProperty().addAll(getPlayers(v.getNewValue().getId()));
-                model.cannotDeleteCurrentFactionProperty().set(!isCurrentUserOwnsCurrentFaction());
+                model.cannotDeleteCurrentFactionProperty()
+                        .set(!factionListService.isCurrentUserOwnsCurrentFaction(model.selectedFactionProperty()
+                                .get().getOwnerId()));
             }
         });
+    }
+
+    /**
+     * Метод, выполняющийся при подключении клиента и выполняющий основную приязку к событиям.
+     */
+    @PostConstruct
+    public void init() {
+        propertyBinder.bind(model.windowVisibleProperty(), Qualifiers.FACTION_WINDOW_VISIBLE_QUALIFIER);
+        propertyBinder.bind(model.currentUserModelProperty(), Qualifiers.CURRENT_USER_MODEL_QUALIFIER);
+
     }
 
 }

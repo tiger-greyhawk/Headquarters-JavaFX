@@ -6,5 +6,6 @@ import java.util.List;
  *
  */
 public interface FactionPlayerService {
-    List<Long> findPlayersByFactionId(long factionId);
+    List<Long> findPlayersByFactionId(Long factionId);
+    Long findFactionByPlayerId(Long playerId);
 }

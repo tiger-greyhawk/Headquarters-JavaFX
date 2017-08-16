@@ -12,8 +12,9 @@ public interface Constants {
     String LOGIN_CONTROLLER_NAME = "LOGIN_CONTROLLER";
     String TIME_ATTACK_LIST_CONTROLLER_NAME = "TIME_ATTACK_LIST_CONTROLLER";
 
+    String SHOW_EVENT = "ShowEvent";
     String LOGIN_EVENT = "LoginEvent";
     String CREATE_FACTION_EVENT = "CreateFactionEvent";
     String DELETE_FACTION_EVENT = "DeleteFactionEvent";
-    String CREATE_ALLIES_FACTION_EVENT = "CreateAlliesFactionEvent";
+    String SET_ALLY_FACTION_EVENT = "SetAllyFactionEvent";
 }

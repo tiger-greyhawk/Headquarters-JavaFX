@@ -14,17 +14,22 @@ import java.util.stream.Collectors;
 @Service("basicFactionPlayerService")
 public class BasicFactionPlayerService implements FactionPlayerService {
 
-    private final FactionPlayerRepository factionPlayerDao;
+    private final FactionPlayerRepository factionPlayerRepository;
 
     public BasicFactionPlayerService(FactionPlayerRepository factionPlayerRepository) {
-        this.factionPlayerDao = factionPlayerRepository;
+        this.factionPlayerRepository = factionPlayerRepository;
     }
 
     @Override
-    public List<Long> findPlayersByFactionId(long factionId) {
-        return factionPlayerDao.findByFactionId(factionId)
+    public List<Long> findPlayersByFactionId(Long factionId) {
+        return factionPlayerRepository.findByFactionId(factionId)
                 .stream()
                 .map(FactionPlayer::getPlayerId)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Long findFactionByPlayerId(Long playerId) {
+        return factionPlayerRepository.findByPlayerId(playerId).getFactionId();
     }
 }

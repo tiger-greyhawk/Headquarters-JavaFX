@@ -28,13 +28,16 @@ public class BasicUserActivePlayerService implements UserActivePlayerService {
         return userActivePlayerRepository.findByUserId(userId).orElseThrow(()-> new NotFoundException("Cant found active player by this user"));
     }
 
+    /**
+     * Возвращает активного игрока пользователя с переданным id или new Player(id:-1L, userId:-1L, nick:"nullPlayer")
+     */
     @Override
     public Player getActivePlayer(Long userId) {
-        if (userId == 0L) return new Player(0L, 0L, "nullPlayer");
+        if (userId == -1L) return new Player(-1L, -1L, "nullPlayer");
         return playerService.findPlayer(userActivePlayerRepository.findByUserId(userId)
-                .orElseThrow(()->new NotFoundException("не найден активный игрок данного пользователя"))
+                .orElse(new UserActivePlayer(-1L, -1L, -1L))  // находим связь User - ActivePlayer
                 .getActivePlayerId())
-                .orElseThrow(()->new NotFoundException("не найден активный игрок данного пользователя"));
+                .orElse(new Player(-1L, -1L, "nullPlayer")); // находим и возвращаем игрока с id найденном в "связи"
     }
 
     @Override

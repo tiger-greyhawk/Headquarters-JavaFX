@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+
 /**
  *
  */
@@ -39,15 +40,17 @@ public class SecurityContextHolderServiceImpl implements SecurityContextHolderSe
     }
 
     /**
-     * Возвращает из контекста текущего пользователя или пользователя anonymousUser с id=0 если пользователь не залогинен.
-     * @return
-     */
+     * Возвращает из контекста текущего пользователя или пользователя anonymousUser с id=-1 если роль пользователя ROLE_ANONYMOUS.
+    */
     @Override
-    public User getCurrentUser(){
+    public User getCurrentUser() {
         SimpleGrantedAuthority roleAnonymous = new SimpleGrantedAuthority("ROLE_ANONYMOUS");
         if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(roleAnonymous))
-            return new User(0L, "anonymousUser", "");
+            return new User(-1L, "anonymousUser", "");
         UserDetails userDetails = ((UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         return userService.findUserByLogin(userDetails.getUsername()).orElseThrow(() -> new NotFoundException("User not found"));
+
     }
+
+
 }
