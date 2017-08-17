@@ -81,6 +81,6 @@ public class BasicFactionListService implements FactionListService {
                 factionPlayerService.findFactionByPlayerId(
                         userActivePlayerService.getActivePlayer(
                                 contextHolderService.getCurrentUser().getId()
-                        ).getId())).orElse(new Faction(-1L, "without faction", -1L));
+                        ).getId())).orElse(new Faction(-1L, "without faction", "", -1L));
     }
 }

@@ -14,7 +14,7 @@
             </padding>
             <Label>filter factions by name: </Label>
             <TextField fx:id="factionFilterPattern"/>
-            <TextField fx:id="loginProperty"/>
+            <TextField fx:id="sloganProperty"/>
         </FlowPane>
     </top>
     <center>

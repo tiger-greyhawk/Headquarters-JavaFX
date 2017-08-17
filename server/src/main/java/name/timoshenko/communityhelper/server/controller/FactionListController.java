@@ -93,6 +93,7 @@ public class FactionListController {
                     final FactionModel factionModel = beanManager.create(FactionModel.class);
                     factionModel.idProperty().set(faction.getId());
                     factionModel.nameProperty().set(faction.getName());
+                    factionModel.sloganProperty().set(faction.getSlogan());
                     factionModel.ownerIdProperty().set(faction.getOwnerId());
                     factionModel.ownerNameProperty().set(
                             playerService.findPlayer(faction.getOwnerId()).map(Player::getNick).orElse("")
@@ -144,13 +145,14 @@ public class FactionListController {
     }
 
     @DolphinAction(Constants.CREATE_FACTION_EVENT)
-    private void createFaction(@Param("factionName") String factionName){
+    private void createFaction(@Param("factionName") String factionName, @Param("factionSlogan") String factionSlogan){
         try {
-            Faction factionToCreate = new Faction(0L, factionName, userActivePlayerService.getActivePlayer(contextHolderService.getCurrentUser().getId()).getId());
+            Faction factionToCreate = new Faction(0L, factionName, factionSlogan, userActivePlayerService.getActivePlayer(contextHolderService.getCurrentUser().getId()).getId());
             Faction faction = factionService.createFaction(factionToCreate);
             final FactionModel factionModel = beanManager.create(FactionModel.class);
             factionModel.idProperty().set(faction.getId());
             factionModel.nameProperty().set(faction.getName());
+            factionModel.sloganProperty().set(faction.getSlogan());
             factionModel.ownerIdProperty().set(userActivePlayerService.getActivePlayer(contextHolderService.getCurrentUser().getId())
                     .getId());
             factionModel.ownerNameProperty().set(userActivePlayerService.getActivePlayer(contextHolderService.getCurrentUser().getId())
@@ -199,6 +201,7 @@ public class FactionListController {
                 model.cannotDeleteCurrentFactionProperty()
                         .set(!factionListService.isCurrentUserOwnsCurrentFaction(model.selectedFactionProperty()
                                 .get().getOwnerId()));
+                //model.selectedFactionProperty().get().sloganProperty().set(v.getNewValue().getSlogan());
             }
         });
     }

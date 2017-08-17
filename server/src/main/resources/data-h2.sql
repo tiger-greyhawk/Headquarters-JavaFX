@@ -36,11 +36,11 @@ insert into user_active_player (id, user_id, active_player_id) values
     (1, 1, 1),
     (2, 2, 3);
 
-insert into factions (id, name, owner_id) values
-    (1, 'The United Earth Federation', 1),
-    (2, 'The Cybran Nation', 2),
-    (3, 'The Aeon Illuminate', 3),
-    (4, 'The Seraphim', 4);
+insert into factions (id, name, slogan, owner_id) values
+    (1, 'The United Earth Federation', '111', 1),
+    (2, 'The Cybran Nation', '123', 2),
+    (3, 'The Aeon Illuminate', '222', 3),
+    (4, 'The Seraphim', '333', 4);
 
 insert into faction_players (id, faction_id, player_id) values
     (0, 1, 1),

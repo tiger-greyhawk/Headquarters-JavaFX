@@ -46,6 +46,9 @@ public class CachedFactionService implements FactionService {
 
     @Override
     public Faction createFaction(Faction faction) {
+        List<Faction> factions = factionsCache.get("");
+        factions.add(faction);
+        factionsCache.put("", factions);
         return source.createFaction(faction);
     }
 
