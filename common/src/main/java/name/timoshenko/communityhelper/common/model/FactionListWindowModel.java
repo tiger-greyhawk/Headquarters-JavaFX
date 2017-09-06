@@ -28,6 +28,8 @@ public class FactionListWindowModel implements Serializable {
 
     private Property<Boolean> canDeleteCurrentFaction;
 
+    private ObservableList<WorldAdminModel> worldAdminModel;
+
     public Property<Boolean> windowVisibleProperty() {
         return windowVisible;
     }
@@ -42,6 +44,10 @@ public class FactionListWindowModel implements Serializable {
 
     public ObservableList<FactionModel> factionsProperty() {
         return factions;
+    }
+
+    public ObservableList<WorldAdminModel> worldsProperty() {
+        return worldAdminModel;
     }
 
     public Property<FactionModel> selectedFactionProperty() {

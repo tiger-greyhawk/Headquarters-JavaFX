@@ -34,4 +34,5 @@ public class CurrentUserModel implements Serializable {
     public Property<Boolean> loggedInProperty() {
         return loggedIn;
     }
+
 }

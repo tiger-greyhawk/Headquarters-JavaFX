@@ -10,6 +10,7 @@ import com.canoo.dolphin.mapping.Property;
 public class FactionModel {
     private Property<Long> id;
     private Property<String> name;
+    private Property<String> world;
     private Property<String> slogan;
     private Property<Long> ownerId;
     private Property<String> ownerName;
@@ -22,6 +23,10 @@ public class FactionModel {
 
     public Property<String> nameProperty() {
         return name;
+    }
+
+    public Property<String> worldProperty() {
+        return world;
     }
 
     public Property<String> sloganProperty() {
@@ -50,6 +55,10 @@ public class FactionModel {
 
     public String getName() {
         return name.get();
+    }
+
+    public String getWorld() {
+        return world.get();
     }
 
     public String getSlogan() {

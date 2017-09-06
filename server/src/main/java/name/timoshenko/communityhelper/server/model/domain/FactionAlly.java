@@ -1,5 +1,7 @@
 package name.timoshenko.communityhelper.server.model.domain;
 
+import name.timoshenko.communityhelper.common.AllyTypeConstants;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -8,7 +10,7 @@ import java.util.Date;
 @Table(name = "faction_allies", uniqueConstraints={
                @UniqueConstraint(columnNames={"first_faction_id", "second_faction_id"})
         })
-public class AllyOfFaction implements Serializable {
+public class FactionAlly implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,17 +47,17 @@ public class AllyOfFaction implements Serializable {
     /*TODO Enum
      * Надо переделать на Enum?
      */
-    private allyTypeEnum allyType;
+    private String allyType;
 
     @Column(name = "created_date")
     private Date createdDate;
 
-    public enum allyTypeEnum {NULLY, ALLY, ENEMY}
+    //public enum allyTypeEnum {NULLY, ALLY, ENEMY}
 
-    public AllyOfFaction() { this(0L, 0L, 0L, "", allyTypeEnum.NULLY, new Date());
+    public FactionAlly() { this(0L, 0L, 0L, "", AllyTypeConstants.NULLY, new Date());
     }
 
-    public AllyOfFaction(Long id, Long firstFactionId, Long secondFactionId, String note, allyTypeEnum allyType, Date createdDate) {
+    public FactionAlly(Long id, Long firstFactionId, Long secondFactionId, String note, String allyType, Date createdDate) {
         this.id = id;
         this.firstFactionId = firstFactionId;
         this.secondFactionId = secondFactionId;
@@ -80,7 +82,7 @@ public class AllyOfFaction implements Serializable {
         return note;
     }
 
-    public Enum getAllyType() {
+    public String getAllyType() {
         return allyType;
     }
 
@@ -90,7 +92,7 @@ public class AllyOfFaction implements Serializable {
 
     @Override
     public String toString() {
-        return "AllyOfFaction{" +
+        return "FactionAlly{" +
                 "id=" + id +
                 ", firstFactionId=" + firstFactionId +
                 ", secondFactionId=" + secondFactionId +

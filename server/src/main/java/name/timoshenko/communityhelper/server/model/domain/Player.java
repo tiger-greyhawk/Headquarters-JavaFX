@@ -14,17 +14,20 @@ public class Player {
     private final Long id;
     @Column(name = "user_id", nullable = false)
     private final Long userId;
+    @Column(name = "world_id", nullable = false)
+    private final Long worldId;
     @Column(name = "nick", nullable = false)
     private final String nick;
 
 
     public Player() {
-        this(null, null, null);
+        this(null, null, null, null);
     }
 
-    public Player(Long id, Long userId, String nick) {
+    public Player(Long id, Long userId, Long worldId, String nick) {
         this.id = id;
         this.userId = userId;
+        this.worldId = worldId;
         this.nick = nick;
     }
 
@@ -36,6 +39,10 @@ public class Player {
         return userId;
     }
 
+    public Long getWorldId() {
+        return worldId;
+    }
+
     public String getNick() {
         return nick;
     }
@@ -45,6 +52,7 @@ public class Player {
         return "Player{" +
                 "id=" + id +
                 ", userId=" + userId +
+                ", worldId=" + worldId +
                 ", nick='" + nick + '\'' +
                 '}';
     }

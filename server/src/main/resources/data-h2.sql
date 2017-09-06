@@ -6,20 +6,26 @@ insert into users (id, login, password) values
     (5, 'admin1', '123'),
     (6, 'admin2', '123');
 
-insert into players (id, user_id, nick) values
-    (1, 1, 'Player1'),
-    (2, 1, 'Player2'),
-    (3, 2, 'Player3'),
-    (4, 2, 'Player4'),
-    (5, 3, 'Player5'),
-    (6, 3, 'Player6'),
-    (7, 4, 'Player7'),
-    (8, 4, 'Player8'),
-    (9, 4, 'PlayerNullUser');
+insert into players (id, user_id, world_id, nick) values
+    (1, 1, 1, 'Player1'),
+    (2, 1, 2, 'Player2'),
+    (3, 2, 1, 'Player3'),
+    (4, 2, 2, 'Player4'),
+    (5, 3, 1, 'Player5'),
+    (6, 3, 2, 'Player6'),
+    (7, 4, 1, 'Player7'),
+    (8, 4, 2, 'Player8'),
+    (9, 4, 1, 'PlayerNullUser');
+
+insert into world (id, name) values
+    (1, 'мир 6'),
+    (2, 'europe 4');
 
 insert into faction_allies (id, first_faction_id, second_faction_id, note, ally_type, created_date) values
-    (1, 1, 3, 'no', 0, '2014-04-04 10:10:17.78'),
-    (2, 3, 1, 'yes', 0, '2014-04-04 10:10:17.78');
+    (1, 1, 3, 'no', 'ally', '2014-04-04 10:10:17.78'),
+    (2, 3, 1, 'yes', 'ally', '2014-04-04 10:10:17.78'),
+    (3, 1, 2, 'no', 'ally', '2014-04-04 10:10:17.78'),
+    (4, 2, 1, 'no', 'ally', '2014-04-04 10:10:17.78');
 
 /*insert into user_player (id, user_id, player_id) values
     (1,1,1),
@@ -34,24 +40,31 @@ insert into faction_allies (id, first_faction_id, second_faction_id, note, ally_
 
 insert into user_active_player (id, user_id, active_player_id) values
     (1, 1, 1),
-    (2, 2, 3);
+    (2, 2, 4),
+    (3, 3, 5),
+    (4, 4, 7);
 
-insert into factions (id, name, slogan, owner_id) values
-    (1, 'The United Earth Federation', '111', 1),
-    (2, 'The Cybran Nation', '123', 2),
-    (3, 'The Aeon Illuminate', '222', 3),
-    (4, 'The Seraphim', '333', 4);
+insert into factions (id, name, slogan, owner_id, world_id) values
+    (1, 'The United Earth Federation', '111', 1, 1),
+    (2, 'The Cybran Nation', '123', 2, 1),
+    (3, 'The Aeon Illuminate', '222', 3, 1),
+    (4, 'The Seraphim', '333', 4, 1);
 
-insert into faction_players (id, faction_id, player_id) values
-    (0, 1, 1),
-    (1, 1, 2),
-    (2, 1, 3),
-    (3, 2, 4),
-    (4, 2, 5),
-    (5, 3, 6),
-    (6, 3, 7),
-    (7, 3, 8),
-    (8, 3, 9);
+insert into faction_players (id, faction_id, player_id, invited) values
+    (0, 1, 1, 1),
+    (1, 1, 2, 1),
+    (2, 1, 3, 1),
+    (3, 2, 4, 1),
+    (4, 3, 5, 1),
+    (5, 3, 6, 1),
+    (6, 4, 7, 1),
+    (7, 3, 8, 1),
+    (8, 3, 9, 1);
+
+insert into request_resource (id, player_id, name, amount) values
+    (0, 1, 'wood', '1000'),
+    (1, 1, 'stone', '2000'),
+    (2, 4, 'stone', '10000');
 
 insert into roles (id, name) values
     (1, 'ROLE_USER'),

@@ -59,4 +59,9 @@ public class BasicPlayerService implements PlayerService {
         List<Player> players = playerRepository.findAll(ids);
         return players;
     }
+
+    @Override
+    public Player addPlayer(Player player) {
+        return playerRepository.save(player);
+    }
 }

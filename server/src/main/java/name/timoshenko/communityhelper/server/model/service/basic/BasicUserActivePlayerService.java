@@ -33,11 +33,11 @@ public class BasicUserActivePlayerService implements UserActivePlayerService {
      */
     @Override
     public Player getActivePlayer(Long userId) {
-        if (userId == -1L) return new Player(-1L, -1L, "nullPlayer");
+        if (userId == -1L) return new Player(-1L, -1L, -1L, "nullPlayer");
         return playerService.findPlayer(userActivePlayerRepository.findByUserId(userId)
                 .orElse(new UserActivePlayer(-1L, -1L, -1L))  // находим связь User - ActivePlayer
                 .getActivePlayerId())
-                .orElse(new Player(-1L, -1L, "nullPlayer")); // находим и возвращаем игрока с id найденном в "связи"
+                .orElse(new Player(-1L, -1L, -1L, "nullPlayer")); // находим и возвращаем игрока с id найденном в "связи"
     }
 
     @Override

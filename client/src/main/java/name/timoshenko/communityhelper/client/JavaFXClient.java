@@ -8,10 +8,7 @@ import com.canoo.platform.core.DolphinRuntimeException;
 import com.google.common.base.CaseFormat;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import name.timoshenko.communityhelper.client.controller.FactionListView;
-import name.timoshenko.communityhelper.client.controller.LoginView;
-import name.timoshenko.communityhelper.client.controller.MainView;
-import name.timoshenko.communityhelper.client.controller.StagedFXMLViewBinder;
+import name.timoshenko.communityhelper.client.controller.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +22,7 @@ import java.net.URL;
  *
  */
 public class JavaFXClient extends DolphinPlatformApplication {
+
 
     public static void main(String[] args) {
         launch(args);
@@ -68,8 +66,9 @@ public class JavaFXClient extends DolphinPlatformApplication {
         createFxmlView(clientContext, MainView.class, mainStage);
         createFxmlView(clientContext, FactionListView.class, new Stage());
         createFxmlView(clientContext, LoginView.class, new Stage());
+        createFxmlView(clientContext, RequestResourceListView.class, new Stage());
+        createFxmlView(clientContext, MyPlayersListView.class, new Stage());
         //createFxmlView(clientContext, TimeAttackListView.class, new Stage());
-// Нельзя создавать сразу все окна все-таки... Даже hide().
     }
 
     @Override

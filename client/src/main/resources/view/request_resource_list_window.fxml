@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns:fx="http://javafx.com/fxml">
+    <top>
+    </top>
+    <center>
+        <AnchorPane xmlns:fx="http://javafx.com/fxml">
+            <TableView fx:id="requestResourceTableView" AnchorPane.topAnchor="15" AnchorPane.leftAnchor="15" AnchorPane.rightAnchor="15" AnchorPane.bottomAnchor="155">
+                <columns>
+                    <TableColumn fx:id="requestResourceTablePlayerNameColumn" text="Player">
+                        <cellValueFactory><PropertyValueFactory property="player"/></cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="requestResourceTableVillageIdColumn" text="Village">
+                        <cellValueFactory><PropertyValueFactory property="villageId"/></cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="requestResourceTableNameColumn" text="Resource">
+                        <cellValueFactory><PropertyValueFactory property="name"/></cellValueFactory>
+                    </TableColumn>
+                    <TableColumn fx:id="requestResourceTableAmountColumn" text="Amount">
+                        <cellValueFactory><PropertyValueFactory property="amount"/></cellValueFactory>
+                    </TableColumn>
+                </columns>
+            </TableView>
+            <FlowPane AnchorPane.bottomAnchor="120" AnchorPane.leftAnchor="15" AnchorPane.rightAnchor="15">
+            <Button fx:id="newRequestButton">New request</Button>
+            </FlowPane>
+        </AnchorPane>
+    </center>
+</BorderPane>

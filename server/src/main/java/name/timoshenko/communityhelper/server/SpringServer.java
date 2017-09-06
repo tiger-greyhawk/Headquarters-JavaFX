@@ -3,6 +3,8 @@ package name.timoshenko.communityhelper.server;
 import com.canoo.platform.server.spring.DolphinPlatformApplication;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * Основной класс, запускающий spring-framework, который, в свою очередь, запускает
@@ -11,6 +13,8 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
  * создаваемые объекты.
  */
 @DolphinPlatformApplication
+@EnableScheduling
+@EnableAsync
 public class SpringServer extends SpringBootServletInitializer {
 
     public static void main(String[] args) {

@@ -49,6 +49,7 @@ public class BasicFactionService implements FactionService {
 
     @Override
     public void deleteFaction(Long factionId) {
+
         factionRepository.delete(factionId);
     }
 }

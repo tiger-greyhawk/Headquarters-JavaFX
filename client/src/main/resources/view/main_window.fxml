@@ -22,15 +22,6 @@
                   </ImageView>
               </graphic>
             <items>
-              <MenuItem fx:id="connectMenuItem" mnemonicParsing="false" text="Connect">
-                  <graphic>
-                      <ImageView pickOnBounds="true" smooth="false">
-                          <image>
-                            <Image url="@/media/icon/connect.png" />
-                          </image>
-                      </ImageView>
-                  </graphic>
-              </MenuItem>
               <MenuItem fx:id="registrationMenuItem" mnemonicParsing="false" text="Registration" />
               <MenuItem fx:id="logoutMenuItem" mnemonicParsing="false" text="Log Out" />
               <MenuItem fx:id="exitMenuItem" mnemonicParsing="false" text="Exit" />
@@ -45,7 +36,7 @@
                   </ImageView>
               </graphic>
                <items>
-                  <MenuItem mnemonicParsing="false" text="Supply" />
+                  <MenuItem fx:id="requestResourceMenuItem" mnemonicParsing="false" text="Supply" />
                   <Menu mnemonicParsing="false" text="Military. Запросы на подкрепы, тайм-атаки, интердикты, и т.п.">
                     <items>
                       <MenuItem mnemonicParsing="false" text="Time-attack" />
@@ -78,7 +69,7 @@
                   </Menu>
                </items>
           </Menu>
-          <Menu fx:id="OptionsMenu" mnemonicParsing="false">
+          <Menu fx:id="optionsMenu" mnemonicParsing="false">
               <graphic>
                   <ImageView pickOnBounds="true" smooth="false">
                       <image>
@@ -87,7 +78,16 @@
                   </ImageView>
               </graphic>
             <items>
-              <MenuItem mnemonicParsing="false" text="My players" />
+                <MenuItem fx:id="optionsFactionsMenuItem" mnemonicParsing="false" text="Factions">
+                    <graphic>
+                        <ImageView pickOnBounds="true" smooth="false">
+                            <image>
+                                <Image url="@/media/icon/connect.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </MenuItem>
+                <MenuItem fx:id="optionsMyPlayersMenuItem" mnemonicParsing="false" text="My players" />
                   <Menu mnemonicParsing="false" text="Manage active player">
                     <items>
                       <MenuItem mnemonicParsing="false" text="Villages" />

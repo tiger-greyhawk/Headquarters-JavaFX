@@ -19,15 +19,21 @@ public class FactionPlayer {
     private final Long factionId;
     @Column(name = "player_id")
     private final Long playerId;
+    @Column(name = "invited")
+    private final Boolean invited;
+    @Column(name = "confirmed")
+    private final Boolean confirmed;
 
     public FactionPlayer() {
-        this(null, null, null);
+        this(null, null, null, false, false);
     }
 
-    public FactionPlayer(Long id, Long factionId, Long playerId) {
+    public FactionPlayer(Long id, Long factionId, Long playerId, Boolean invited, Boolean confirmed) {
         this.id = id;
         this.factionId = factionId;
         this.playerId = playerId;
+        this.invited = invited;
+        this.confirmed = confirmed;
     }
 
     public Long getFactionId() {
@@ -42,12 +48,22 @@ public class FactionPlayer {
         return id;
     }
 
+    public Boolean getInvited() {
+        return invited;
+    }
+
+    public Boolean getConfirmed() {
+        return confirmed;
+    }
+
     @Override
     public String toString() {
         return "FactionPlayer{" +
                 "id=" + id +
                 ", factionId=" + factionId +
                 ", playerId=" + playerId +
+                ", invited=" + invited +
+                ", confirmed=" + confirmed +
                 '}';
     }
 }

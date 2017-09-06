@@ -2,7 +2,6 @@ package name.timoshenko.communityhelper.client.controller;
 
 import com.canoo.platform.client.ClientContext;
 import com.canoo.platform.client.ControllerActionException;
-import com.canoo.platform.client.javafx.DolphinPlatformApplication;
 import com.canoo.platform.client.javafx.FXBinder;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -61,6 +60,8 @@ public class LoginView extends StagedFXMLViewBinder<LoginWindowModel> {
 
         FXBinder.bind(loginText.textProperty()).bidirectionalTo(getModel().currentUserModelProperty().get().loginProperty());
         FXBinder.bind(passwordText.textProperty()).bidirectionalTo(getModel().currentUserModelProperty().get().passwordProperty());
+        loginText.setText("user3");
+        passwordText.setText("123");
 
         getParent().getScene().getWindow().setOnCloseRequest(e -> System.exit(0));
         quitButton.setOnAction(e -> System.exit(0));

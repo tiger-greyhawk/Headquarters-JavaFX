@@ -11,7 +11,11 @@ import java.io.Serializable;
 @DolphinBean
 public class MainWindowModel implements Serializable{
 
-    private Property<Boolean> factionWinowVisible;
+    private Property<Boolean> factionWindowVisible;
+
+    private Property<Boolean> requestResourceWindowVisible;
+
+    private Property<Boolean> myPlayersListWindowVisible;
 
     private Property<CurrentUserModel> currentUserModel;
 
@@ -19,7 +23,15 @@ public class MainWindowModel implements Serializable{
         return currentUserModel;
     }
 
-    public Property<Boolean> factionWinowVisibleProperty() {
-        return factionWinowVisible;
+    public Property<Boolean> factionWindowVisibleProperty() {
+        return factionWindowVisible;
+    }
+
+    public Property<Boolean> requestResourceWindowVisibleProperty() {
+        return requestResourceWindowVisible;
+    }
+
+    public Property<Boolean> myPlayersListWindowVisibleProperty() {
+        return myPlayersListWindowVisible;
     }
 }

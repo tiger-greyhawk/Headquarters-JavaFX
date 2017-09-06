@@ -25,16 +25,19 @@
                         <TableColumn fx:id="factionTableNameColumn" text="Name">
                             <cellValueFactory><PropertyValueFactory property="name"/></cellValueFactory>
                         </TableColumn>
+                        <TableColumn fx:id="factionTableWorldColumn" text="World">
+                            <cellValueFactory><PropertyValueFactory property="world"/></cellValueFactory>
+                        </TableColumn>
                         <TableColumn fx:id="factionTableOwnerColumn" text="Owner">
                             <cellValueFactory><PropertyValueFactory property="ownerName"/></cellValueFactory>
                         </TableColumn>
                         <TableColumn fx:id="factionTableAllyColumn" text="Allied">
-                            <cellValueFactory><PropertyValueFactory property="ownerName"/></cellValueFactory>
+                            <cellValueFactory><PropertyValueFactory property="typeAlly"/></cellValueFactory>
                         </TableColumn>
                     </columns>
                 </TableView>
                 <Button fx:id="deleteFactionButton" AnchorPane.bottomAnchor="120" AnchorPane.leftAnchor="15" AnchorPane.rightAnchor="15">Delete</Button>
-                <Button AnchorPane.bottomAnchor="85" AnchorPane.leftAnchor="15" AnchorPane.rightAnchor="15">Join</Button>
+                <Button fx:id="joinFactionButton" AnchorPane.bottomAnchor="85" AnchorPane.leftAnchor="15" AnchorPane.rightAnchor="15">Join</Button>
                 <Button fx:id="createFactionButton" AnchorPane.bottomAnchor="50" AnchorPane.leftAnchor="15" AnchorPane.rightAnchor="15">Create</Button>
                 <Button fx:id="allyFactionButton" AnchorPane.bottomAnchor="15" AnchorPane.leftAnchor="15" AnchorPane.rightAnchor="15">Ally</Button>
             </AnchorPane>

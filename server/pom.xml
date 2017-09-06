@@ -22,7 +22,7 @@
         </repository>
     </repositories>
 -->
-    <!--<packaging>war</packaging>-->
+    <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
@@ -33,7 +33,8 @@
         <dependency>
             <groupId>com.canoo.dolphin-platform</groupId>
             <artifactId>dolphin-platform-server-spring</artifactId>
-            <version>0.15.0</version>
+            <version>0.16.0</version>
+            <!-- in 0.15.0 was bug with UTF-8 in model: https://github.com/canoo/dolphin-platform/issues/540 -->
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -119,19 +120,31 @@
             <artifactId>h2</artifactId>
             <version>1.4.194</version>
         </dependency>
+        <!--<dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>RELEASE</version>
+        </dependency>-->
     </dependencies>
 
-<!--
+
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>1.5.4.RELEASE</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
--->
+
 
 
 </project>

@@ -34,7 +34,9 @@ public class MainController {
 
     @PostConstruct
     public void init() {
-        propertyBinder.bind(model.factionWinowVisibleProperty(), Qualifiers.FACTION_WINDOW_VISIBLE_QUALIFIER);
+        propertyBinder.bind(model.factionWindowVisibleProperty(), Qualifiers.FACTION_WINDOW_VISIBLE_QUALIFIER);
+        propertyBinder.bind(model.requestResourceWindowVisibleProperty(), Qualifiers.REQUEST_RESOURCE_WINDOW_VISIBLE_QUALIFIER);
+        propertyBinder.bind(model.myPlayersListWindowVisibleProperty(), Qualifiers.MY_PLAYERS_LIST_WINDOW_VISIBLE_QUALIFIER);
         propertyBinder.bind(model.currentUserModelProperty(), Qualifiers.CURRENT_USER_MODEL_QUALIFIER);
     }
 

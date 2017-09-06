@@ -15,7 +15,13 @@
         <dependency>
             <groupId>com.canoo.dolphin-platform</groupId>
             <artifactId>dolphin-platform-rpm-common</artifactId>
-            <version>0.15.0</version>
+            <version>0.16.0</version>
+            <!-- in 0.15.0 was bug with UTF-8 in model: https://github.com/canoo/dolphin-platform/issues/540 -->
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>4.2.3.RELEASE</version>
         </dependency>
     </dependencies>
 

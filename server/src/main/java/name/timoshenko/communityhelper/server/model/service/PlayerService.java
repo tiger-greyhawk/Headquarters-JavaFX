@@ -12,4 +12,5 @@ public interface PlayerService {
     Optional<Player> findPlayer(Long id);
     List<Player> findPlayersByUserId(Long userId);
     List<Player> getPlayers(List<Long> ids);
+    Player addPlayer(Player player);
 }
